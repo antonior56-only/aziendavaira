@@ -79,6 +79,7 @@ h2{font:700 19px Bitter,Georgia,serif;margin:20px 0 8px}
 .lk a{color:var(--sea);font-weight:600;text-decoration:none}.lk small{display:block;color:var(--mut);font-size:13px}
 .deadline-alert{max-width:720px;margin:4px auto 12px;padding:12px 16px;border:1px solid var(--dn);border-radius:10px;background:var(--sf)}.deadline-alert strong{display:block}.deadline-alert ul{margin:7px 0;padding-left:20px}.deadline-alert li{margin:3px 0}.deadline-alert .btn{margin-top:6px}.deadline-alert .x{color:var(--mut)}
 #install-app{font-size:14px;padding:8px 12px;margin:8px 0 0}
+.manual-link{display:inline-block;margin:8px 0 0 10px;color:var(--sea);font-weight:600;text-underline-offset:3px}
 #pwa-update{border-color:var(--ol)}
 </style>
 </head>
@@ -89,6 +90,7 @@ h2{font:700 19px Bitter,Georgia,serif;margin:20px 0 8px}
 <p class="sub" style="font-size:12px">Versione <span id="app-version"></span> · <span id="save-status" role="status">Apertura archivio…</span></p>
 <p class="sub" id="offline-status" style="display:none;font-size:13px">Modalità offline: i dati locali restano disponibili. I collegamenti esterni richiedono Internet.</p>
 <button class="btn s" id="install-app" type="button" hidden>Installa l’app</button>
+<a class="manual-link" href="./manuale-utente.pdf" target="_blank" rel="noopener" type="application/pdf">Manuale PDF</a>
 </header>
 <div class="menu-wrap"><nav id="nav" aria-label="Menu principale"></nav></div>
 <div id="deadline-alert" class="deadline-alert" role="status" aria-live="polite" style="display:none"></div>
@@ -98,7 +100,7 @@ h2{font:700 19px Bitter,Georgia,serif;margin:20px 0 8px}
 <button class="fab" id="fab">+ Nuovo prezzo</button>
 
 <script>
-const APP_VERSION='2026.10.25.4';
+const APP_VERSION='2026.10.25.5';
 const CATS={
  animali:{t:'Animali',h:'Prezzi di vendita',unita:['€/kg vivo','€/capo','€/kg macellato'],voci:['Agnello da latte','Agnellone','Pecora da riforma','Capretto','Capra da riforma','Vitello da ingrasso','Vitellone','Vacca da riforma','Vacca podolica da riforma']},
  formaggi:{t:'Formaggi',h:'Prezzi di vendita',unita:['€/kg','€/pezzo'],voci:['Caciocavallo','Caciocavallo podolico','Ricotta fresca','Ricotta forte','Pecorino','Formaggio caprino','Scamorza','Mozzarella','Provola','Latte alimentare']},
@@ -527,9 +529,10 @@ function aggiornaP(){
  let n=P.tel.trim().replace(/[^\d+]/g,'');
  if(n.startsWith('+'))n=n.slice(1);else if(n.startsWith('00'))n=n.slice(2);else if(n)n='39'+n;
  n=n.replace(/\D/g,'');const numeroValido=/^[1-9]\d{7,14}$/.test(n);
- $('#wa').href=t&&numeroValido?`https://wa.me/${n}?text=${encodeURIComponent(t)}`:'#';
- $('#wa').style.opacity=t&&numeroValido?1:.5;$('#wa').setAttribute('aria-disabled',String(!(t&&numeroValido)));$('#wa').title=t&&!numeroValido?'Inserisci un numero completo con prefisso per inviare su WhatsApp':'';
- $('#pm').textContent=t?'Controlla il testo, poi tocca Invia su WhatsApp.':'Aggiungi almeno una voce con quantità e prezzo.';
+ const telefonoAssente=!P.tel.trim(),puoInviare=!!t&&(telefonoAssente||numeroValido);
+ $('#wa').href=puoInviare?`https://wa.me/${numeroValido?n:''}?text=${encodeURIComponent(t)}`:'#';
+ $('#wa').style.opacity=puoInviare?1:.5;$('#wa').setAttribute('aria-disabled',String(!puoInviare));$('#wa').title=t&&!telefonoAssente&&!numeroValido?'Controlla il numero completo con prefisso internazionale.':'';
+ $('#pm').textContent=!t?'Aggiungi almeno una voce con quantità e prezzo.':!puoInviare?'Controlla il numero WhatsApp o lascia il campo vuoto per scegliere un contatto.':telefonoAssente?'Controlla il testo, poi scegli il destinatario in WhatsApp.':'Controlla il testo, poi tocca Invia su WhatsApp.';
 }
 function stampaPreventivo(){
  leggiP();const righe=P.righe.filter(r=>r.d&&num(r.q)>0&&num(r.p)>=0);if(!righe.length){$('#pm').textContent='Completa almeno una voce con quantità e prezzo prima di stampare.';return}
@@ -666,8 +669,8 @@ function anteprimaBackup(a){
 }
 function dati(){
  const entrate=S.c.filter(x=>x.tipo==='e').length,uscite=S.c.filter(x=>x.tipo==='u').length;
- return `<h2>Dati e copia di sicurezza</h2><div class="card"><p class="note">I dati sono in IndexedDB in questo browser e su questo dispositivo. GitHub Pages pubblica l’app, non sincronizza le registrazioni. Usa una copia JSON per passare da un’altra copia HTML, dal file locale al sito o a un altro dispositivo.</p><p class="note">Al primo avvio, questa versione importa i dati precedenti trovati nello stesso indirizzo del browser. Da quel momento usa questa versione: le vecchie copie HTML continuano ad avere un archivio separato.</p><p><strong>Versione ${APP_VERSION}</strong><br><small class="note" style="overflow-wrap:anywhere">Indirizzo aperto: ${esc(origineApp())}</small></p><p>Archivio attuale: <strong>${S.e.length}</strong> prezzi · <strong>${entrate}</strong> entrate · <strong>${uscite}</strong> uscite · <strong>${ADV.scadenze.length}</strong> scadenze · <strong>${(ADV.rimanenze||[]).length}</strong> rimanenze annuali</p><p class="note">Ultima copia scaricata: <strong id="lastBackup">${dataUltimaCopia()}</strong>${copiaDaFare()?' · È il momento di scaricarne una nuova.':''}</p><button class="btn" id="dwn" type="button">Scarica copia di sicurezza</button><button class="btn s" id="cpbk" type="button">Copia testo</button><details class="lk" id="rawBackup" style="margin-top:12px"><summary>Mostra il testo completo della copia</summary><textarea id="bk" rows="5" readonly aria-label="Dati della copia di sicurezza">${esc(JSON.stringify(backupPayload()))}</textarea></details><p class="note" id="rm"></p></div>
- <div class="card"><h2 style="margin-top:0">Ripristina o trasferisci una copia</h2><p class="note">Per trasferire i dati al futuro sito GitHub Pages: scarica qui la copia JSON, apri il sito e seleziona il file qui sotto. Controlla l’anteprima prima di confermare: il ripristino sostituisce l’archivio aperto.</p><label for="backupFile">Seleziona una copia JSON</label><input id="backupFile" type="file" accept=".json,application/json"><label for="im">Oppure incolla il testo della copia</label><textarea id="im" rows="5"></textarea><button class="btn s" id="previewBackup" type="button">Mostra anteprima</button><div id="previewResult" class="note" role="status"></div><button class="btn" id="ri" type="button" disabled>Conferma ripristino</button></div>`;
+ return `<h2>Dati e copia di sicurezza</h2><div class="card"><p class="note">I dati sono in IndexedDB in questo browser e su questo dispositivo. GitHub Pages pubblica l’app, non sincronizza le registrazioni. Per copiare o trasferire l’archivio puoi scaricare un file JSON oppure usare Copia testo e conservare il testo completo.</p><p class="note">Al primo avvio, questa versione importa i dati precedenti trovati nello stesso indirizzo del browser. Da quel momento usa questa versione: le vecchie copie HTML continuano ad avere un archivio separato.</p><p><strong>Versione ${APP_VERSION}</strong><br><small class="note" style="overflow-wrap:anywhere">Indirizzo aperto: ${esc(origineApp())}</small></p><p>Archivio attuale: <strong>${S.e.length}</strong> prezzi · <strong>${entrate}</strong> entrate · <strong>${uscite}</strong> uscite · <strong>${ADV.scadenze.length}</strong> scadenze · <strong>${(ADV.rimanenze||[]).length}</strong> rimanenze annuali</p><p class="note">Ultima copia scaricata: <strong id="lastBackup">${dataUltimaCopia()}</strong>${copiaDaFare()?' · È il momento di scaricarne una nuova.':''}</p><button class="btn" id="dwn" type="button">Scarica copia di sicurezza</button><button class="btn s" id="cpbk" type="button">Copia testo</button><details class="lk" id="rawBackup" style="margin-top:12px"><summary>Mostra il testo completo della copia</summary><textarea id="bk" rows="5" readonly aria-label="Dati della copia di sicurezza">${esc(JSON.stringify(backupPayload()))}</textarea></details><p class="note" id="rm"></p></div>
+ <div class="card"><h2 style="margin-top:0">Ripristina o trasferisci una copia</h2><p class="note">Scegli il file JSON oppure incolla il testo completo della copia nel campo qui sotto. Controlla l’anteprima prima di confermare: il ripristino sostituisce l’archivio aperto.</p><label for="backupFile">Seleziona una copia JSON</label><input id="backupFile" type="file" accept=".json,application/json"><label for="im">Oppure incolla il testo della copia</label><textarea id="im" rows="5"></textarea><button class="btn s" id="previewBackup" type="button">Mostra anteprima</button><div id="previewResult" class="note" role="status"></div><button class="btn" id="ri" type="button" disabled>Conferma ripristino</button></div>`;
 }
 function copiaDaFare(){try{const d=JSON.parse(readStored('pa_last_backup')||'null');return !d||!Number.isFinite(Date.parse(d))||(Date.now()-Date.parse(d))/86400000>=30}catch(x){return true}}
 function agevolazioni(){

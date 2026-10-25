@@ -1,7 +1,7 @@
-const CACHE_NAME='stalla-caseificio-shell-2026-10-25-1';
+const CACHE_NAME='stalla-caseificio-shell-2026-10-25-3';
 const APP_ROOT=self.registration.scope;
 const INDEX_URL=new URL('./index.html',APP_ROOT).href;
-const SHELL=['./','./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png'].map(p=>new URL(p,APP_ROOT).href);
+const SHELL=['./','./index.html','./manifest.webmanifest','./manuale-utente.pdf','./icons/icon-192.png','./icons/icon-512.png','./icons/icon-maskable-512.png'].map(p=>new URL(p,APP_ROOT).href);
 
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(SHELL)));
