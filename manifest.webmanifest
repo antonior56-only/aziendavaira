@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "Prezzi di stalla e caseificio",
-  "short_name": "Stalla Caseificio",
+  "name": "Gestione contabile",
+  "short_name": "Gestione contabile",
   "description": "Conti, prezzi, quantità, preventivi e scadenze per stalla e caseificio.",
   "lang": "it",
   "start_url": "./",

@@ -2,11 +2,12 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<title>Prezzi di stalla e caseificio</title>
+<title>Gestione contabile</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#566B2A">
 <meta name="description" content="Conti, prezzi, quantità, preventivi e scadenze per stalla e caseificio.">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Gestione contabile">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
@@ -80,19 +81,27 @@ h2{font:700 19px Bitter,Georgia,serif;margin:20px 0 8px}
 .deadline-alert{max-width:720px;margin:4px auto 12px;padding:12px 16px;border:1px solid var(--dn);border-radius:10px;background:var(--sf)}.deadline-alert strong{display:block}.deadline-alert ul{margin:7px 0;padding-left:20px}.deadline-alert li{margin:3px 0}.deadline-alert .btn{margin-top:6px}.deadline-alert .x{color:var(--mut)}
 #install-app{font-size:14px;padding:8px 12px;margin:8px 0 0}
 .manual-link{display:inline-block;margin:8px 0 0 10px;color:var(--sea);font-weight:600;text-underline-offset:3px}
+.guide-open{margin:8px 0 0 10px;padding:7px 11px;border:1px solid var(--ln);border-radius:8px;background:var(--sf);color:var(--sea);font:600 14px/1.3 "Source Sans 3",system-ui,sans-serif;cursor:pointer}
+.quick-guide{max-width:688px;margin:0 auto 12px;padding:13px 16px;border:1px solid var(--ln);border-radius:12px;background:var(--sf)}
+.quick-guide h2{margin:2px 0 6px}.quick-guide p{margin:5px 0;color:var(--mut)}.quick-guide .btn{margin-top:8px}.quick-guide .guide-progress{font-size:12px;font-weight:700;color:var(--ol)}
+.context-help{margin:8px 0 14px;padding:9px 12px;border:1px solid var(--ln);border-radius:10px;background:var(--sf)}
+.context-help>summary{cursor:pointer;font-weight:600;color:var(--sea)}.context-help p{margin:8px 0 3px;font-size:14px}.context-help a{color:var(--sea)}
+.field-help{margin:4px 0 10px}.field-help>summary{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid var(--ln);border-radius:50%;background:var(--sf);color:var(--sea);font-weight:700;cursor:pointer;list-style:none}.field-help>summary::-webkit-details-marker{display:none}.field-help p{margin:6px 0 0;padding:8px 10px;border-radius:8px;background:var(--sf);color:var(--mut);font-size:14px}
 #pwa-update{border-color:var(--ol)}
 </style>
 </head>
 <body>
 <header>
-<h1>Prezzi di stalla e caseificio</h1>
-<p class="sub">Entrate, uscite e quantità dell’azienda, con prezzi e preventivi a portata di mano.</p>
-<p class="sub" style="font-size:12px">Versione <span id="app-version"></span> · <span id="save-status" role="status">Apertura archivio…</span></p>
-<p class="sub" id="offline-status" style="display:none;font-size:13px">Modalità offline: i dati locali restano disponibili. I collegamenti esterni richiedono Internet.</p>
+<h1>Gestione contabile</h1>
+<p class="sub" style="font-size:12px"><span id="app-version"></span></p>
+<span id="save-status" role="status" hidden>Apertura archivio…</span>
 <button class="btn s" id="install-app" type="button" hidden>Installa l’app</button>
 <a class="manual-link" href="./manuale-utente.pdf" target="_blank" rel="noopener" type="application/pdf">Manuale PDF</a>
+<button class="guide-open" id="open-guide" type="button">Guida rapida</button>
 </header>
 <div class="menu-wrap"><nav id="nav" aria-label="Menu principale"></nav></div>
+<section id="quick-guide" class="quick-guide" aria-label="Guida rapida" hidden></section>
+<p class="sub" id="offline-status" style="display:none;font-size:13px;max-width:720px;margin:0 auto 10px;padding:0 16px">Modalità offline: i dati locali restano disponibili. I collegamenti esterni richiedono Internet.</p>
 <div id="deadline-alert" class="deadline-alert" role="status" aria-live="polite" style="display:none"></div>
 <div id="pwa-update" class="deadline-alert" role="status" hidden><strong>Nuova versione dell’app disponibile.</strong><button class="btn s" id="apply-update" type="button">Aggiorna l’app</button></div>
 <div id="storage-warning" role="alert" style="display:none;max-width:720px;margin:8px auto;padding:12px 16px;background:#fff0dd;color:#633b00;border-radius:8px">Il browser non riesce a salvare i dati. Scarica una copia di sicurezza dalla scheda Dati prima di chiudere la pagina.</div>
@@ -100,7 +109,7 @@ h2{font:700 19px Bitter,Georgia,serif;margin:20px 0 8px}
 <button class="fab" id="fab">+ Nuovo prezzo</button>
 
 <script>
-const APP_VERSION='2026.10.25.7';
+const APP_VERSION='2026.10.25.9';
 const CATS={
  animali:{t:'Animali',h:'Prezzi di vendita',unita:['€/kg vivo','€/capo','€/kg macellato'],voci:['Agnello da latte','Agnellone','Pecora da riforma','Capretto','Capra da riforma','Vitello da ingrasso','Vitellone','Vacca da riforma','Vacca podolica da riforma']},
  formaggi:{t:'Formaggi',h:'Prezzi di vendita',unita:['€/kg','€/pezzo'],voci:['Caciocavallo','Caciocavallo podolico','Ricotta fresca','Ricotta forte','Pecorino','Formaggio caprino','Scamorza','Mozzarella','Provola','Latte alimentare']},
@@ -134,6 +143,47 @@ const eur=n=>n.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDi
 const oggi=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
 const fd=d=>d.split('-').reverse().join('/');
 const dataValida=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&!Number.isNaN(Date.parse(d))&&new Date(d+'T12:00:00').toISOString().slice(0,10)===d;
+const HELP_BOXES={
+ prezzi:['Prezzi e listino','Qui registri i prezzi che vuoi usare come riferimento. Ogni aggiornamento conserva data e unità; i collegamenti ai listini ufficiali aprono siti esterni e non cambiano automaticamente i tuoi prezzi.'],
+ prezzoForm:['Registrare un prezzo','Scegli la voce, inserisci il prezzo nella sua unità e controlla la data. La stessa voce può avere più prezzi nello storico.'],
+ panoramica:['Leggere la panoramica','Entrate e uscite sono i movimenti registrati nei Conti. Il saldo è la loro differenza e non rappresenta l’utile fiscale. Gli incassi previsti nello Scadenzario restano separati.'],
+ movimenti:['Registrare i movimenti','Per ogni entrata o uscita controlla categoria, data e importo. Se indichi anche prodotto, quantità e unità, i confronti mostreranno quali prodotti vendi e in quali volumi.'],
+ movimentoForm:['Compilare una riga dei Conti','La categoria decide in quale gruppo appare il movimento. Per formaggi, animali e mangimi scegli il singolo prodotto e controlla quantità, unità e prezzo. La data stabilisce il mese e l’anno dei report.'],
+ dipendente:['Costo del dipendente','Inserisci lo stipendio e, separatamente, solo i contributi INPS e gli altri oneri aggiuntivi. L’app somma i tre importi in una sola uscita alla data della spesa.'],
+ quantita:['Produzione e rimanenze','La produzione annuale di un formaggio si può ricostruire da vendite + altre uscite + rimanenza finale − rimanenza iniziale − acquisti di prodotto finito. L’asterisco indica quantità parziali, per esempio vendite senza kg.'],
+ confronti:['Interpretare i confronti','“Vendite per prodotto” è ordinato per ricavi: il primo prodotto genera più entrate, ma non necessariamente più kg. Confronta le quantità solo se l’unità è la stessa. Scegli due anni per vedere le differenze.'],
+ categorie:['Categorie personalizzate','Rinominare una categoria aggiorna anche le righe già registrate con quel nome. Se la elimini, i movimenti esistenti restano nei Conti.'],
+ preventivi:['Preparare un preventivo','Aggiungi le voci e verifica il totale. Puoi modificare direttamente la casella Messaggio: WhatsApp e Copia testo usano quel testo. “Rigenera messaggio” sostituisce le modifiche manuali.'],
+ resa:['Simulazione della resa','Inserisci litri di latte e kg ottenuti. Il prezzo può arrivare dal listino dei formaggi in €/kg. Ricavi e confronti sono simulazioni: questa scheda non registra movimenti nei Conti.'],
+ scadenzario:['Promemoria e Conti','Le scadenze avvisano dei termini nei prossimi 7 giorni. Completare un pagamento o un incasso qui non crea automaticamente una riga nei Conti: registrala quando avviene.'],
+ dati:['Backup e ripristino','Puoi scaricare un file JSON oppure copiare il testo completo. Per ripristinare, seleziona il file o incolla il testo, controlla l’anteprima e conferma. Il ripristino sostituisce l’archivio aperto.'],
+ agevolazioni:['Consultare i bandi','Apri le fonti istituzionali e verifica sempre requisiti, documenti e scadenze del bando attuale. Puoi annotare il termine nello Scadenzario.'],
+ capi:['Vendita capi','Indica numero di capi e prezzo per capo o peso totale e prezzo al kg. Controlla le caselle per registrare l’entrata nei Conti e aggiornare lo storico dei prezzi.']
+};
+const GUIDE_SEEN_KEY='gc_guide_seen_v1';
+let guideMode='invite',guideStep=0;
+try{if(localStorage.getItem(GUIDE_SEEN_KEY)==='1')guideMode='hidden'}catch(x){}
+const GUIDE_STEPS=[
+ {title:'Registra un prezzo',text:'Apri il listino Formaggi e inserisci un prezzo con data e unità. Servirà come riferimento nelle vendite e nella resa del latte.',label:'Apri nuovo prezzo',tab:'formaggi',action:'price'},
+ {title:'Registra una vendita',text:'Nei Conti scegli Entrata, poi categoria e prodotto. Aggiungi quantità e unità per vedere il prodotto nei report delle vendite.',label:'Apri nuova entrata',tab:'conti',action:'entry'},
+ {title:'Registra una spesa',text:'Nei Conti scegli Uscita e indica categoria, importo e data. Puoi aggiungere la quantità quando è utile confrontare i volumi.',label:'Apri nuova uscita',tab:'conti',action:'expense'},
+ {title:'Leggi il primo riepilogo',text:'Apri Confronti per vedere entrate, uscite e saldo di due anni, oltre ai ricavi e alle quantità per prodotto.',label:'Apri Confronti',tab:'conti',action:'compare'}
+];
+function markGuideSeen(){try{localStorage.setItem(GUIDE_SEEN_KEY,'1')}catch(x){}}
+function renderQuickGuide(){const box=$('#quick-guide');if(guideMode==='hidden'){box.hidden=true;box.innerHTML='';return}box.hidden=false;
+ if(guideMode==='invite'){box.innerHTML='<span class="guide-progress">GUIDA FACOLTATIVA</span><h2>Primi passi nell’app</h2><p>Quattro brevi passi per inserire un prezzo, una vendita, una spesa e leggere il riepilogo. Puoi riaprire la guida quando vuoi.</p><button class="btn" type="button" data-guide="start">Inizia la guida</button><button class="btn s" type="button" data-guide="close">Più tardi</button>';return}
+ const step=GUIDE_STEPS[guideStep];box.innerHTML=`<span class="guide-progress">PASSO ${guideStep+1} DI ${GUIDE_STEPS.length}</span><h2>${step.title}</h2><p>${step.text}</p><button class="btn" type="button" data-guide="go">${step.label}</button>${guideStep?'<button class="btn s" type="button" data-guide="back">Indietro</button>':''}<button class="btn s" type="button" data-guide="next">${guideStep===GUIDE_STEPS.length-1?'Termina':'Avanti'}</button><button class="btn s" type="button" data-guide="close">Chiudi</button>`;
+}
+function currentHelpKey(){if(S.open)return 'prezzoForm';if(CATS[S.tab])return 'prezzi';if(S.tab==='conti'){if(S.gc)return 'categorie';if(S.pay)return 'dipendente';if(S.ct)return 'movimentoForm';return S.contiView||'panoramica'}return {prev:'preventivi',resa:'resa',scadenzario:'scadenzario',agevolazioni:'agevolazioni',capi:'capi',dati:'dati'}[S.tab]||'dati'}
+function addFieldHelp(selector,title,text){const input=document.querySelector(selector);if(!input)return;const anchor=input.closest('label')||input;anchor.insertAdjacentHTML('afterend',`<details class="field-help"><summary aria-label="Aiuto: ${title}" title="Aiuto: ${title}">?</summary><p>${text}</p></details>`)}
+function renderContextHelp(){renderQuickGuide();const key=currentHelpKey(),content=HELP_BOXES[key];if(!content)return;const target=$('#conti-panel')||$('#main'),box=`<details class="context-help" data-help="${key}"><summary>💡 Come funziona: ${content[0]}</summary><p>${content[1]}</p><p><a href="./manuale-utente.pdf" target="_blank" rel="noopener">Apri il manuale completo (PDF)</a></p></details>`;
+ if(target.id==='conti-panel')target.insertAdjacentHTML('afterbegin',box);else{const heading=target.querySelector(':scope > h2')||target.querySelector(':scope > form > h2');if(heading)heading.insertAdjacentHTML('afterend',box);else target.insertAdjacentHTML('afterbegin',box)}
+ if(key==='prezzoForm')addFieldHelp('#fu','Unità del prezzo','Scegli €/kg, €/capo o un’altra unità coerente con il prodotto. Nei confronti si usano prezzi con la stessa unità.');
+ if(key==='movimentoForm'){addFieldHelp('#ka','Singolo prodotto','Scegli il prodotto: così la vendita appare nel report Vendite per prodotto.');addFieldHelp('#kq','Quantità','Inserisci la quantità nella stessa unità del prezzo. Senza quantità i ricavi restano nel report, ma i volumi risultano parziali.');addFieldHelp('#kd','Data del movimento','La data decide in quale mese e anno compare l’entrata o la spesa.');}
+ if(key==='dipendente')addFieldHelp('[name="contributiInps"]','Contributi INPS','Inserisci soltanto i contributi a carico dell’azienda, in aggiunta allo stipendio.');
+ if(key==='quantita')addFieldHelp('#frim [name="iniziale"]','Rimanenza iniziale','Sono i kg disponibili al 1° gennaio. Se esiste la chiusura dell’anno precedente, l’app usa automaticamente la sua rimanenza finale.');
+ if(key==='preventivi')addFieldHelp('#ptx','Messaggio del preventivo','Puoi scrivere nella casella. WhatsApp e Copia testo usano il contenuto visibile; Rigenera messaggio riparte dalle voci.');
+}
 const ARCHIVE_DB='prezzi-stalla-caseificio',ARCHIVE_STORE='archivio',ARCHIVE_KEYS=['pa_e','pa_c','pa_v','pa_cc','pa_quote','pa_adv','pa_az','pa_last_backup'];
 let archiveDb=null,archiveCache={},archiveLoading=true,archiveChangedDuringLoad=false,archiveGeneration=0,archiveCommitted=0,archiveRevision=0,archiveWorker=null,archiveFailed=false;
 function storageStatus(t){const el=$('#save-status');if(el)el.textContent=t}
@@ -805,7 +855,7 @@ function draw(){
  aggiornaAvvisoScadenze();
  const m=$('#main');
  $('#fab').style.display=CATS[S.tab]&&!S.open?'block':'none';
- if(S.open){m.innerHTML=form();bindForm();return}
+ if(S.open){m.innerHTML=form();bindForm();renderContextHelp();return}
  if(CATS[S.tab]){m.innerHTML=lista(S.tab);bindV(S.tab)}
  else if(S.tab==='conti'){m.innerHTML=conti();bindConti()}
  else if(S.tab==='prev'){m.innerHTML=prev();bindPrev()}
@@ -837,6 +887,7 @@ function draw(){
  applicata=true;scollegaVenditeLotti();save();if(archiveWorker&&!(await archiveWorker)||archiveFailed)throw Error('Salvataggio non riuscito');draw();const msg=$('#rm');if(msg)msg.textContent='Dati ripristinati e salvati in IndexedDB.'
  }catch(x){$('#previewResult').textContent=applicata?'I dati sono visibili ma il salvataggio non è riuscito. Scarica subito una copia JSON prima di chiudere la pagina.':'Copia non valida o incompleta: nessun dato è stato modificato.'}}
  }
+ renderContextHelp();
 }
 $('#main').addEventListener('click',e=>{const q=e.target.closest('[data-delc]');
  const linked=e.target.closest('[data-open-cap]');if(linked){S.capEd=Number(linked.dataset.openCap);S.tab='capi';draw();window.scrollTo(0,0);return}
@@ -845,6 +896,14 @@ $('#main').addEventListener('click',e=>{const q=e.target.closest('[data-delc]');
  const b=e.target.closest('[data-del]');
  if(b)conf(b,()=>{S.od=b.dataset.k||null;S.e=S.e.filter(x=>x.id!==+b.dataset.del);save();draw()})});
 $('#fab').onclick=()=>{S.open=true;draw();window.scrollTo(0,0)};
+$('#open-guide').onclick=()=>{guideMode='active';guideStep=0;markGuideSeen();renderQuickGuide();$('#quick-guide').scrollIntoView({behavior:'smooth',block:'start'})};
+$('#quick-guide').onclick=e=>{const action=e.target.closest('[data-guide]')?.dataset.guide;if(!action)return;
+ if(action==='close'){guideMode='hidden';markGuideSeen();renderQuickGuide();return}
+ if(action==='start'){guideMode='active';guideStep=0;markGuideSeen();renderQuickGuide();return}
+ if(action==='back'){guideStep=Math.max(0,guideStep-1);renderQuickGuide();return}
+ if(action==='next'){if(guideStep===GUIDE_STEPS.length-1){guideMode='hidden';markGuideSeen()}else guideStep++;renderQuickGuide();return}
+ if(action==='go'){const step=GUIDE_STEPS[guideStep];document.querySelector(`#nav [data-t="${step.tab}"]`)?.click();if(step.action==='price')$('#fab')?.click();if(step.action==='entry')document.querySelector('[data-new="e"]')?.click();if(step.action==='expense')document.querySelector('[data-new="u"]')?.click();if(step.action==='compare')document.querySelector('[data-conti-view="confronti"]')?.click();window.scrollTo({top:0,behavior:'smooth'})}
+};
 document.addEventListener('click',e=>{if(!e.target.closest('.menu-wrap'))document.querySelectorAll('.menu-group[open]').forEach(d=>d.open=false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.menu-group[open]').forEach(d=>{d.open=false;d.querySelector('summary')?.focus()})});
 window.addEventListener('beforeunload',e=>{if(archiveWorker&&archiveCommitted<archiveGeneration){e.preventDefault();e.returnValue=''}});

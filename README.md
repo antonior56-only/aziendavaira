@@ -1,8 +1,10 @@
-# Stalla e caseificio — PWA per GitHub Pages
+# Gestione contabile — PWA per GitHub Pages
 
 Questa cartella contiene la versione installabile dell'app. L'app funziona offline dopo la prima apertura online. Entrate, uscite, prezzi, scadenze e preventivi restano in IndexedDB nel browser e nel dispositivo che usi: GitHub Pages pubblica soltanto i file dell'app.
 
 Il [manuale d'uso in PDF](manuale-utente.pdf) spiega le operazioni passo passo e i report disponibili. È accessibile anche dal pulsante **Manuale PDF** nell'app e viene conservato per la lettura offline.
+
+Per un aiuto immediato, apri i riquadri **💡 Come funziona** nelle varie schermate o il piccolo **?** vicino ai campi più importanti. Il pulsante **Guida rapida** avvia o riapre un percorso facoltativo in quattro passi. Questi aiuti non modificano i dati registrati.
 
 ## Pubblicazione
 
