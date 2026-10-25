@@ -22,6 +22,10 @@ Le istruzioni ufficiali per Pages sono disponibili nella [documentazione GitHub]
 
 Il file locale e il sito GitHub Pages hanno archivi distinti. Anche browser o dispositivi diversi hanno archivi distinti: questa PWA non sincronizza i dati automaticamente.
 
+## Preventivi
+
+Ogni volta che apri **Preventivi** dal menu, la maschera è vuota e pronta per un nuovo documento. Puoi aggiungere voci con quantità e prezzo e modificare direttamente la casella **Messaggio**: il testo scritto viene usato da **Invia su WhatsApp** e **Copia testo**. Le modifiche restano anche mentre completi altri campi. **Rigenera messaggio** ricrea il testo dalle voci e sostituisce quello scritto a mano. **Stampa / salva PDF** usa le voci e il campo Note. Prima di cambiare sezione, invia, copia o stampa il preventivo se vuoi conservarlo.
+
 ## Funzionamento offline e aggiornamenti
 
 - Dopo la prima visita online, l'app e i dati locali restano utilizzabili offline. I collegamenti a listini ufficiali, agevolazioni e WhatsApp richiedono Internet.

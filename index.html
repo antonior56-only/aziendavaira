@@ -100,7 +100,7 @@ h2{font:700 19px Bitter,Georgia,serif;margin:20px 0 8px}
 <button class="fab" id="fab">+ Nuovo prezzo</button>
 
 <script>
-const APP_VERSION='2026.10.25.5';
+const APP_VERSION='2026.10.25.7';
 const CATS={
  animali:{t:'Animali',h:'Prezzi di vendita',unita:['€/kg vivo','€/capo','€/kg macellato'],voci:['Agnello da latte','Agnellone','Pecora da riforma','Capretto','Capra da riforma','Vitello da ingrasso','Vitellone','Vacca da riforma','Vacca podolica da riforma']},
  formaggi:{t:'Formaggi',h:'Prezzi di vendita',unita:['€/kg','€/pezzo'],voci:['Caciocavallo','Caciocavallo podolico','Ricotta fresca','Ricotta forte','Pecorino','Formaggio caprino','Scamorza','Mozzarella','Provola','Latte alimentare']},
@@ -160,7 +160,7 @@ function tabs(){
  const group=CATS[S.tab]?'prezzi':['conti','capi','resa','agevolazioni'].includes(S.tab)?'azienda':S.tab==='prev'?'prev':S.tab==='scadenzario'?'scadenzario':'dati';
  const menu=(k,l,items)=>`<details class="menu-group ${group===k?'selected':''}"><summary>${l} ▾</summary><div class="menu-pop">${items.map(([id,n])=>`<button type="button" aria-current="${S.tab===id?'page':'false'}" data-t="${id}">${n}</button>`).join('')}</div></details>`;
  $('#nav').innerHTML=menu('prezzi','Prezzi',Object.keys(CATS).map(k=>[k,CATS[k].t]))+menu('azienda','Azienda',[['conti','Conti'],['resa','Resa del latte'],['agevolazioni','Agevolazioni']])+`<button type="button" aria-current="${group==='prev'?'page':'false'}" data-t="prev">Preventivi</button><button type="button" aria-current="${group==='scadenzario'?'page':'false'}" data-t="scadenzario">Scadenzario</button><button type="button" aria-current="${group==='dati'?'page':'false'}" data-t="dati">Dati</button>`;
- const go=k=>{S.tab=k;if(CATS[k])S.lastPrice=k;S.open=false;S.ct=false;S.editC=null;S.pay=false;S.payEdit=null;S.rimEdit=null;S.rimOpen=false;S.scadEdit=null;S.gv=false;S.gvi=null;S.gc=false;S.gci=null;S.ep=null;S.od=null;S.capEd=null;draw()};
+ const go=k=>{if(k==='prev'){P=nuovoPreventivo();saveP()}S.tab=k;if(CATS[k])S.lastPrice=k;S.open=false;S.ct=false;S.editC=null;S.pay=false;S.payEdit=null;S.rimEdit=null;S.rimOpen=false;S.scadEdit=null;S.gv=false;S.gvi=null;S.gc=false;S.gci=null;S.ep=null;S.od=null;S.capEd=null;draw()};
  $('#nav').onclick=e=>{const b=e.target.closest('[data-t]');if(b)go(b.dataset.t)};
  $('#nav').querySelectorAll('.menu-group').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)$('#nav').querySelectorAll('.menu-group').forEach(other=>{if(other!==d)other.open=false})}));
 }
@@ -480,19 +480,19 @@ function bindConti(){
   if(linkCapi){if(kk.checked&&record.pid)linkedSale.pid=record.pid;else if(linkedSale.pid){rimuoviPrezzoCollegato(linkedSale.pid,record.id,[linkedSale.id]);delete linkedSale.pid;delete record.pid}}
   saveADV();save();S.ct=false;S.editC=null;draw()};
 }
-let P={az:undefined,cli:'',tel:'',iva:'',val:'',nota:'',righe:[]};
+function nuovoPreventivo(){return {az:'',cli:'',tel:'',iva:'',val:'',nota:'',righe:[],messaggio:'',messaggioPersonalizzato:false}}
+let P=nuovoPreventivo();
 const num=v=>{let s=String(v??'').trim().replace(/[\s€]/g,'');if(!s)return NaN;if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');return /^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(s)?Number(s):NaN};
 function saveP(){persist('pa_quote',P)}
-function loadP(){try{const q=JSON.parse(readStored('pa_quote')||'null');if(q&&Array.isArray(q.righe)){P={az:typeof q.az==='string'?q.az:'',cli:typeof q.cli==='string'?q.cli:'',tel:typeof q.tel==='string'?q.tel:'',iva:q.iva||'',val:q.val||'',nota:typeof q.nota==='string'?q.nota:'',righe:q.righe.filter(r=>r&&typeof r==='object').map(r=>({d:String(r.d||''),q:String(r.q||''),u:String(r.u||''),p:String(r.p||'')}))}}}catch(x){}}
+function loadP(){try{const q=JSON.parse(readStored('pa_quote')||'null');if(q&&Array.isArray(q.righe)){P={az:typeof q.az==='string'?q.az:'',cli:typeof q.cli==='string'?q.cli:'',tel:typeof q.tel==='string'?q.tel:'',iva:q.iva||'',val:q.val||'',nota:typeof q.nota==='string'?q.nota:'',righe:q.righe.filter(r=>r&&typeof r==='object').map(r=>({tipo:r.tipo==='testo'?'testo':undefined,d:String(r.d||''),q:String(r.q||''),u:String(r.u||''),p:String(r.p||'')})),messaggio:typeof q.messaggio==='string'?q.messaggio:'',messaggioPersonalizzato:q.messaggioPersonalizzato===true}}}catch(x){}}
 function prev(){
- if(P.az===undefined)P.az=readStored('pa_az')||'';
  const cat=['animali','formaggi'].map(c=>`<optgroup label="${CATS[c].t}">${CATS[c].voci.map(v=>`<option value="${c}|${esc(v)}">${esc(v)}</option>`).join('')}</optgroup>`).join('');
  return `<h2>Preventivo</h2><div class="card">
  <label>La tua azienda<input id="pa" value="${esc(P.az)}"></label>
  <label>Cliente<input id="pc" value="${esc(P.cli)}"></label>
  <label>Telefono WhatsApp del cliente (facoltativo)<input id="pt" type="tel" inputmode="tel" value="${esc(P.tel)}"></label>
  <div class="note">Se scrivi il numero senza prefisso, aggiungo +39.</div></div>
- <h2>Voci</h2>${P.righe.map((r,i)=>`<div class="card"><label>Descrizione<input data-r="${i}" data-f="d" value="${esc(r.d)}"></label>
+ <h2>Voci</h2>${P.righe.map((r,i)=>r.tipo==='testo'?`<div class="card"><label>Testo libero<textarea data-r="${i}" data-f="d" rows="3" placeholder="Es. Consegna presso l’azienda">${esc(r.d)}</textarea></label><button class="x" type="button" data-rm="${i}">Togli testo</button></div>`:`<div class="card"><label>Descrizione<input data-r="${i}" data-f="d" value="${esc(r.d)}"></label>
  <div class="g2"><label>Quantità<input data-r="${i}" data-f="q" inputmode="decimal" value="${esc(r.q)}"></label><label>Unità<input data-r="${i}" data-f="u" value="${esc(r.u)}"></label></div>
  <label>Prezzo per unità (€)<input data-r="${i}" data-f="p" inputmode="decimal" value="${esc(r.p)}"></label>
  <button class="x" type="button" data-rm="${i}">Togli voce</button></div>`).join('')}
@@ -500,7 +500,8 @@ function prev(){
  <button class="btn s" id="pf" type="button" style="margin:8px 0 0">+ Voce libera</button>
  <div class="card" style="margin-top:14px"><div class="g2"><label>IVA % (facoltativa)<input id="pi" inputmode="decimal" value="${esc(P.iva)}"></label><label>Validità (giorni)<input id="pv" inputmode="numeric" value="${esc(P.val)}"></label></div>
  <label>Note<textarea id="pn" rows="2">${esc(P.nota)}</textarea></label></div>
- <h2>Messaggio</h2><div class="card"><textarea id="ptx" rows="9" readonly aria-label="Anteprima del messaggio"></textarea>
+ <h2>Messaggio</h2><div class="card"><label for="ptx">Testo da inviare o copiare</label><textarea id="ptx" rows="9" aria-label="Messaggio del preventivo">${P.messaggioPersonalizzato?esc(P.messaggio):''}</textarea><p class="note">Puoi scrivere direttamente qui. Le modifiche restano nel messaggio anche se completi altri campi. Se vuoi ricrearlo dalle voci del preventivo, premi “Rigenera messaggio”. La stampa PDF usa le voci e il campo Note.</p>
+ <button class="btn s" id="preg" type="button">Rigenera messaggio</button>
  <a class="btn" id="wa" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="#">Invia su WhatsApp</a>
  <button class="btn s" id="pdfq" type="button">Stampa / salva PDF</button>
  <button class="btn s" id="pcp" type="button">Copia testo</button><button class="btn s" id="pnw" type="button">Nuovo</button>
@@ -513,19 +514,20 @@ function leggiP(){
  document.querySelectorAll('[data-r]').forEach(el=>{const r=P.righe[+el.dataset.r];if(r)r[el.dataset.f]=el.value});saveP();
 }
 function testoP(){
- let tot=0;
- const L=P.righe.filter(r=>r.d&&num(r.q)>0&&num(r.p)>=0).map(r=>{const q=num(r.q),p=num(r.p),s=q*p;tot+=s;return `• ${r.d}: ${q.toLocaleString('it-IT',{maximumFractionDigits:3})} ${r.u||''} × ${eur(p)} € = ${eur(s)} €`});
- if(!L.length)return '';
- const o=[`*Preventivo*${P.az?' – '+P.az:''}`,P.cli?`Per: ${P.cli}`:'',`Data: ${fd(oggi())}`,'',...L,''];
+ let tot=0,prodotti=0;
+ const L=P.righe.flatMap(r=>{if(r.tipo==='testo')return r.d.trim()?[r.d.trim()]:[];if(!r.d.trim()||!(num(r.q)>0)||!(num(r.p)>=0))return [];const q=num(r.q),p=num(r.p),s=q*p;tot+=s;prodotti++;return [`• ${r.d}: ${q.toLocaleString('it-IT',{maximumFractionDigits:3})} ${r.u||''} × ${eur(p)} € = ${eur(s)} €`]});
+ if(!prodotti)return '';
+ const o=[`Preventivo${P.az?' – '+P.az:''}`,P.cli?`Per: ${P.cli}`:'',`Data: ${fd(oggi())}`,'',...L,''];
  const iv=num(P.iva);
- if(iv>0){const im=tot*iv/100;o.push(`Imponibile: ${eur(tot)} €`,`IVA ${String(iv).replace('.',',')}%: ${eur(im)} €`,`*Totale: ${eur(tot+im)} €*`)}else o.push(`*Totale: ${eur(tot)} €*`);
+ if(iv>0){const im=tot*iv/100;o.push(`Imponibile: ${eur(tot)} €`,`IVA ${String(iv).replace('.',',')}%: ${eur(im)} €`,`Totale: ${eur(tot+im)} €`)}else o.push(`Totale: ${eur(tot)} €`);
  if(num(P.val)>0)o.push('',`Valido per ${num(P.val)} giorni.`);
  if(P.nota.trim())o.push('',P.nota.trim());
  return o.filter((x,i,a)=>!(x===''&&a[i-1]==='')).join('\n').trim();
 }
 function aggiornaP(){
  if(!$('#ptx'))return;
- const t=testoP();$('#ptx').value=t;
+ if(!P.messaggioPersonalizzato)$('#ptx').value=testoP();
+ const t=$('#ptx').value;
  let n=P.tel.trim().replace(/[^\d+]/g,'');
  if(n.startsWith('+'))n=n.slice(1);else if(n.startsWith('00'))n=n.slice(2);else if(n)n='39'+n;
  n=n.replace(/\D/g,'');const numeroValido=/^[1-9]\d{7,14}$/.test(n);
@@ -535,20 +537,21 @@ function aggiornaP(){
  $('#pm').textContent=!t?'Aggiungi almeno una voce con quantità e prezzo.':!puoInviare?'Controlla il numero WhatsApp o lascia il campo vuoto per scegliere un contatto.':telefonoAssente?'Controlla il testo, poi scegli il destinatario in WhatsApp.':'Controlla il testo, poi tocca Invia su WhatsApp.';
 }
 function stampaPreventivo(){
- leggiP();const righe=P.righe.filter(r=>r.d&&num(r.q)>0&&num(r.p)>=0);if(!righe.length){$('#pm').textContent='Completa almeno una voce con quantità e prezzo prima di stampare.';return}
+ leggiP();const righe=P.righe.filter(r=>r.tipo==='testo'?r.d.trim():r.d.trim()&&num(r.q)>0&&num(r.p)>=0),prodotti=righe.filter(r=>r.tipo!=='testo');if(!prodotti.length){$('#pm').textContent='Completa almeno una voce con quantità e prezzo prima di stampare.';return}
  const w=window.open('','_blank');if(!w){$('#pm').textContent='Il browser ha bloccato la finestra di stampa. Consenti i popup per questa app e riprova.';return}
- const totale=righe.reduce((s,r)=>s+num(r.q)*num(r.p),0),iva=num(P.iva)>0?totale*num(P.iva)/100:0;
- const rows=righe.map(r=>`<tr><td>${esc(r.d)}</td><td>${num(r.q).toLocaleString('it-IT',{maximumFractionDigits:3})} ${esc(r.u||'')}</td><td>${eur(num(r.p))} €</td><td>${eur(num(r.q)*num(r.p))} €</td></tr>`).join('');
- w.document.open();w.document.write(`<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Preventivo${P.cli?' - '+esc(P.cli):''}</title><style>body{font:16px Arial,sans-serif;color:#222;max-width:800px;margin:36px auto;padding:0 24px}h1{font-size:26px;margin-bottom:4px}.meta{color:#555;margin:4px 0 24px}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{padding:10px 8px;border-bottom:1px solid #ccc;text-align:left}th:nth-child(n+2),td:nth-child(n+2){text-align:right}.tot{margin-left:auto;width:260px}.tot div{display:flex;justify-content:space-between;padding:5px 0}.grand{font-size:20px;font-weight:bold;border-top:2px solid #222;margin-top:6px;padding-top:10px!important}.note{white-space:pre-wrap;margin-top:24px}.actions{margin-top:24px}@media print{body{margin:0 auto;padding:0}.actions{display:none}}</style><h1>Preventivo</h1><div class="meta"><strong>${esc(P.az||'')}</strong>${P.cli?`<br>Cliente: ${esc(P.cli)}`:''}${P.tel?`<br>Telefono: ${esc(P.tel)}`:''}<br>Data: ${fd(oggi())}${num(P.val)>0?` · Valido ${num(P.val)} giorni`:''}</div><table><thead><tr><th>Descrizione</th><th>Quantità</th><th>Prezzo unitario</th><th>Totale</th></tr></thead><tbody>${rows}</tbody></table><div class="tot"><div><span>Imponibile</span><span>${eur(totale)} €</span></div>${iva?`<div><span>IVA ${num(P.iva).toLocaleString('it-IT')}%</span><span>${eur(iva)} €</span></div>`:''}<div class="grand"><span>Totale</span><span>${eur(totale+iva)} €</span></div></div>${P.nota.trim()?`<div class="note"><strong>Note</strong><br>${esc(P.nota.trim())}</div>`:''}<div class="actions"><button onclick="window.print()">Stampa / salva PDF</button></div><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250))<\/script></html>`);
+ const totale=prodotti.reduce((s,r)=>s+num(r.q)*num(r.p),0),iva=num(P.iva)>0?totale*num(P.iva)/100:0;
+ const rows=righe.map(r=>r.tipo==='testo'?`<tr class="text-row"><td colspan="4">${esc(r.d.trim())}</td></tr>`:`<tr><td>${esc(r.d)}</td><td>${num(r.q).toLocaleString('it-IT',{maximumFractionDigits:3})} ${esc(r.u||'')}</td><td>${eur(num(r.p))} €</td><td>${eur(num(r.q)*num(r.p))} €</td></tr>`).join('');
+ w.document.open();w.document.write(`<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Preventivo${P.cli?' - '+esc(P.cli):''}</title><style>body{font:16px Arial,sans-serif;color:#222;max-width:800px;margin:36px auto;padding:0 24px}h1{font-size:26px;margin-bottom:4px}.meta{color:#555;margin:4px 0 24px}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{padding:10px 8px;border-bottom:1px solid #ccc;text-align:left}th:nth-child(n+2),td:nth-child(n+2){text-align:right}.text-row td{text-align:left!important;white-space:pre-wrap;background:#f5f7f3}.tot{margin-left:auto;width:260px}.tot div{display:flex;justify-content:space-between;padding:5px 0}.grand{font-size:20px;font-weight:bold;border-top:2px solid #222;margin-top:6px;padding-top:10px!important}.note{white-space:pre-wrap;margin-top:24px}.actions{margin-top:24px}@media print{body{margin:0 auto;padding:0}.actions{display:none}}</style><h1>Preventivo</h1><div class="meta"><strong>${esc(P.az||'')}</strong>${P.cli?`<br>Cliente: ${esc(P.cli)}`:''}${P.tel?`<br>Telefono: ${esc(P.tel)}`:''}<br>Data: ${fd(oggi())}${num(P.val)>0?` · Valido ${num(P.val)} giorni`:''}</div><table><thead><tr><th>Descrizione</th><th>Quantità</th><th>Prezzo unitario</th><th>Totale</th></tr></thead><tbody>${rows}</tbody></table><div class="tot"><div><span>Imponibile</span><span>${eur(totale)} €</span></div>${iva?`<div><span>IVA ${num(P.iva).toLocaleString('it-IT')}%</span><span>${eur(iva)} €</span></div>`:''}<div class="grand"><span>Totale</span><span>${eur(totale+iva)} €</span></div></div>${P.nota.trim()?`<div class="note"><strong>Note</strong><br>${esc(P.nota.trim())}</div>`:''}<div class="actions"><button onclick="window.print()">Stampa / salva PDF</button></div><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250))<\/script></html>`);
  w.document.close();
 }
 function bindPrev(){
- $('#main').oninput=()=>{leggiP();aggiornaP()};
+ $('#main').oninput=e=>{if(e.target.id==='ptx'){P.messaggio=$('#ptx').value;P.messaggioPersonalizzato=true;saveP()}else leggiP();aggiornaP()};
  $('#pl').onchange=e=>{const v=e.target.value;if(!v)return;leggiP();const [c,n]=v.split('|'),u=ultimo(c,n);
   P.righe.push({d:n,q:'',u:u?u.unita.replace('€/',''):'',p:u?String(u.prezzo).replace('.',','):''});saveP();draw()};
  $('#pf').onclick=()=>{leggiP();P.righe.push({d:'',q:'',u:'',p:''});saveP();draw()};
  document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{leggiP();P.righe.splice(+b.dataset.rm,1);saveP();draw()});
- $('#pnw').onclick=e=>conf(e.currentTarget,()=>{P={az:P.az,cli:'',tel:'',iva:'',val:'',nota:'',righe:[]};saveP();draw()});
+ $('#pnw').onclick=e=>conf(e.currentTarget,()=>{P=nuovoPreventivo();saveP();draw()});
+ $('#preg').onclick=()=>{leggiP();P.messaggio='';P.messaggioPersonalizzato=false;saveP();aggiornaP()};
  $('#pdfq').onclick=stampaPreventivo;
  $('#pcp').onclick=()=>{const t=$('#ptx').value;if(!t)return;
   const ok=()=>{$('#pm').textContent='Testo copiato.'};
@@ -823,7 +826,7 @@ function draw(){
  const validoConti=v=>Array.isArray(v)&&v.every(x=>x&&Number.isSafeInteger(x.id)&&['e','u'].includes(x.tipo)&&typeof x.cat==='string'&&x.cat.trim()&&Number.isFinite(x.importo)&&x.importo>=0&&dataValida(x.data)&&['stipendio','contributiInps','altriOneri'].every(k=>x[k]===undefined||Number.isFinite(x[k])&&x[k]>=0)&&(x.stipendio===undefined||x.stipendio>0&&Math.abs(x.importo-Math.round((x.stipendio+(x.contributiInps||0)+(x.altriOneri||0))*100)/100)<0.01));
  const validoV=v=>v&&Object.keys(CATS).every(k=>nomi(v[k]));
  const validoK=k=>k&&nomi(k.entrate)&&nomi(k.uscite)&&k.map&&typeof k.map==='object'&&!Array.isArray(k.map)&&Object.entries(k.map).every(([a,b])=>typeof a==='string'&&Object.hasOwn(CATS,b));
- const validoP=p=>p&&(p.az===undefined||typeof p.az==='string')&&['cli','tel','iva','val','nota'].every(k=>typeof p[k]==='string')&&Array.isArray(p.righe)&&p.righe.every(r=>r&&['d','q','u','p'].every(k=>typeof r[k]==='string'));
+ const validoP=p=>p&&(p.az===undefined||typeof p.az==='string')&&['cli','tel','iva','val','nota'].every(k=>typeof p[k]==='string')&&(p.messaggio===undefined||typeof p.messaggio==='string')&&(p.messaggioPersonalizzato===undefined||typeof p.messaggioPersonalizzato==='boolean')&&Array.isArray(p.righe)&&p.righe.every(r=>r&&(r.tipo===undefined||r.tipo==='testo')&&['d','q','u','p'].every(k=>typeof r[k]==='string'));
  const validoProduzione=a=>!a.produzione||Array.isArray(a.produzione)&&a.produzione.every(x=>x&&Number.isSafeInteger(x.id)&&dataValida(x.data)&&typeof x.prodotto==='string'&&x.prodotto.trim()&&(x.litri===null||x.litri===undefined||Number.isFinite(x.litri)&&x.litri>0)&&Number.isFinite(x.kg)&&x.kg>0);
  const validoRimanenze=a=>!a.rimanenze||Array.isArray(a.rimanenze)&&a.rimanenze.every(x=>x&&Number.isSafeInteger(x.id)&&Number.isSafeInteger(x.anno)&&x.anno>=2000&&x.anno<=2100&&typeof x.prodotto==='string'&&x.prodotto.trim()&&(x.iniziale===null||Number.isFinite(x.iniziale)&&x.iniziale>=0)&&Number.isFinite(x.finale)&&x.finale>=0&&['altreUscite','acquisti'].every(k=>x[k]===undefined||Number.isFinite(x[k])&&x[k]>=0))&&new Set(a.rimanenze.map(x=>`${x.anno}|${chiaveProdotto(x.prodotto)}`)).size===a.rimanenze.length;
  const validoScadenze=a=>!a.scadenze||Array.isArray(a.scadenze)&&a.scadenze.every(x=>x&&(x.tipo===undefined||['pagamento','incasso','altro'].includes(x.tipo))&&(x.importo===undefined||x.importo===null||Number.isFinite(x.importo)&&x.importo>=0)&&(x.completata===undefined||typeof x.completata==='boolean'));
