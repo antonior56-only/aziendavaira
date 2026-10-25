@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Prezzi di stalla e caseificio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#566B2A">
+<meta name="description" content="Conti, prezzi, quantità, preventivi e scadenze per stalla e caseificio.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<style>
+:root{--bg:#EFF2EC;--sf:#FFFFFF;--ink:#1E2B22;--mut:#5E6B62;--ln:#D3DAD0;--ol:#566B2A;--sea:#1B5E78;--up:#2F7A3B;--dn:#B3402A;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141A16;--sf:#1D261F;--ink:#E7EDE6;--mut:#9AA89D;--ln:#33403A;--ol:#A3BE62;--sea:#6BB6D3;--up:#6FCB7C;--dn:#F08A72;--on:#141A16}}
+:root[data-theme="dark"]{--bg:#141A16;--sf:#1D261F;--ink:#E7EDE6;--mut:#9AA89D;--ln:#33403A;--ol:#A3BE62;--sea:#6BB6D3;--up:#6FCB7C;--dn:#F08A72;--on:#141A16}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 "Source Sans 3",system-ui,sans-serif}
+header{padding:20px 16px 8px;max-width:720px;margin:auto}
+h1{font:700 26px/1.15 Bitter,Georgia,serif;margin:0 0 4px}
+.sub{color:var(--mut);font-size:15px;margin:0}
+nav{display:flex;gap:6px;overflow-x:auto;padding:12px 16px;max-width:720px;margin:auto}
+nav button{flex:0 0 auto;border:1.5px solid var(--ln);background:var(--sf);color:var(--ink);padding:10px 14px;border-radius:999px;font:600 15px/1.2 "Source Sans 3",system-ui,sans-serif;cursor:pointer}
+nav button[aria-current=page]{background:var(--ol);border-color:var(--ol);color:var(--on)}
+.menu-wrap{max-width:720px;margin:auto}
+.menu-wrap #nav{margin:0;overflow:visible;flex-wrap:wrap}
+.menu-group{position:relative;flex:0 0 auto}
+.menu-group>summary{list-style:none;border:1.5px solid var(--ln);background:var(--sf);color:var(--ink);padding:10px 14px;border-radius:999px;font:600 15px/1.2 "Source Sans 3",system-ui,sans-serif;cursor:pointer}
+.menu-group>summary::-webkit-details-marker{display:none}
+.menu-group.selected>summary{background:var(--ol);border-color:var(--ol);color:var(--on)}
+.menu-pop{position:absolute;z-index:20;top:calc(100% + 6px);left:0;min-width:210px;padding:6px;background:var(--sf);border:1px solid var(--ln);border-radius:12px;box-shadow:0 8px 24px #0003}
+.menu-pop button{display:block;width:100%;border:0;border-radius:8px;text-align:left;margin:0;padding:12px 14px;font-size:16px}
+.menu-pop button:hover,.menu-pop button:focus-visible{background:var(--bg)}
+@media(max-width:520px){.menu-pop{min-width:190px}}
+.conti-tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;margin:10px 0 14px;scrollbar-width:thin}
+.conti-tabs button{flex:0 0 auto;border:1.5px solid var(--ln);border-radius:999px;padding:9px 13px;background:var(--sf);color:var(--ink);font:600 14px/1.2 "Source Sans 3",system-ui,sans-serif;cursor:pointer}
+.conti-tabs button[aria-current=page]{background:var(--ol);border-color:var(--ol);color:var(--on)}
+main{max-width:720px;margin:auto;padding:0 16px 80px}
+.row{background:var(--sf);border:1px solid var(--ln);border-radius:10px;margin-bottom:8px}
+.row>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer}
+.row>summary::-webkit-details-marker{display:none}
+.nm{flex:1;min-width:0;font-weight:600}
+.nm small{display:block;color:var(--mut);font-weight:400;font-size:13px}
+.pr{text-align:right;font:700 18px Bitter,Georgia,serif}
+.pr small{display:block;font:400 12px "Source Sans 3",sans-serif;color:var(--mut)}
+.d{font-size:13px;font-weight:600}.up{color:var(--up)}.dn{color:var(--dn)}
+.hist{padding:4px 14px 12px;border-top:1px solid var(--ln)}
+.hist table{width:100%;border-collapse:collapse;font-size:15px}
+.hist td{padding:6px 0;border-bottom:1px solid var(--ln)}
+.hist td:nth-child(2){text-align:right;font-weight:600}
+.compare{width:100%;border-collapse:collapse;font-size:14px;white-space:nowrap;font-variant-numeric:tabular-nums}.compare th,.compare td{padding:9px 10px;border-bottom:1px solid var(--ln);text-align:right}.compare th:first-child,.compare td:first-child{text-align:left}.compare thead th{color:var(--mut);font-weight:600;border-bottom:2px solid var(--ln)}.compare tbody tr:last-child th{border-top:2px solid var(--ln)}.compare-wrap{overflow-x:auto}
+.quantity-detail th:nth-child(-n+3),.quantity-detail td:nth-child(-n+3){text-align:left;white-space:normal}
+.year-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.year-box{min-width:0;padding:14px;border:1px solid var(--ln);border-radius:10px;background:var(--bg)}.year-box h3{margin:0 0 8px;font:700 20px Bitter,Georgia,serif}.year-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:7px 0;border-top:1px solid var(--ln)}.year-row strong{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}.year-row.balance{font-weight:700}.balance-delta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:14px 0 4px;padding:12px 14px;border-radius:9px;background:var(--bg)}.balance-delta strong{font-variant-numeric:tabular-nums;white-space:nowrap}
+.dashboard-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.dashboard-metric{padding:12px;border:1px solid var(--ln);border-radius:10px;background:var(--bg)}.dashboard-metric strong{display:block;margin:4px 0;font:700 20px Bitter,Georgia,serif;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.dashboard-metric small{display:block;color:var(--mut);font-size:13px}.trend-scroll{overflow-x:auto}.trend-chart{display:grid;grid-template-columns:repeat(12,minmax(40px,1fr));gap:8px;min-width:590px;margin-top:12px}.trend-month{text-align:center;font-size:12px;color:var(--mut)}.trend-bars{height:92px;display:flex;align-items:flex-end;justify-content:center;gap:4px;border-bottom:1px solid var(--ln)}.trend-bar{width:12px;min-height:2px;border-radius:3px 3px 0 0}.trend-bar.in{background:var(--up)}.trend-bar.out{background:var(--dn)}.trend-key{display:flex;gap:16px;flex-wrap:wrap;margin:9px 0;color:var(--mut);font-size:13px}.trend-key span::before{content:'';display:inline-block;width:9px;height:9px;margin-right:5px;border-radius:2px;background:var(--up)}.trend-key span.out::before{background:var(--dn)}
+@media(max-width:560px){.year-stats{grid-template-columns:1fr}.balance-delta{flex-wrap:wrap}.compare th,.compare td{padding:8px}}
+@media(max-width:560px){.dashboard-metrics{grid-template-columns:1fr}}
+.x{background:none;border:0;color:var(--dn);font:inherit;cursor:pointer;padding:4px 8px}
+.empty{color:var(--mut);padding:10px 2px}
+.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--sea);color:var(--on);border:0;border-radius:999px;padding:14px 20px;font:600 16px/1.2 "Source Sans 3",system-ui,sans-serif;box-shadow:0 2px 10px #0004;cursor:pointer}
+form,.card{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:14px;margin-bottom:12px}
+label{display:block;font-size:14px;color:var(--mut);margin:10px 0 4px}
+input,select,textarea{width:100%;padding:11px;border:1.5px solid var(--ln);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input:focus,select:focus,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--sea);outline-offset:2px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{background:var(--ol);color:var(--on);border:0;border-radius:8px;padding:12px 16px;font:600 16px/1.2 "Source Sans 3",system-ui,sans-serif;cursor:pointer;margin-top:14px}
+.btn.s{background:none;color:var(--ink);border:1.5px solid var(--ln);margin-left:6px}
+#wa[aria-disabled=true]{pointer-events:none}
+.res{font:700 22px Bitter,Georgia,serif;margin:6px 0}
+.res.neg{color:var(--dn)}
+h2{font:700 19px Bitter,Georgia,serif;margin:20px 0 8px}
+.src a{color:var(--sea);font-weight:600}
+.src p{margin:4px 0 14px;color:var(--mut);font-size:15px}
+.note{font-size:14px;color:var(--mut)}
+.lk{margin-bottom:12px}.lk>summary{cursor:pointer;font-weight:600;color:var(--sea);padding:6px 0}
+.lk ul{list-style:none;margin:6px 0 0;padding:0}.lk li{padding:8px 0;border-top:1px solid var(--ln)}
+.lk a{color:var(--sea);font-weight:600;text-decoration:none}.lk small{display:block;color:var(--mut);font-size:13px}
+.deadline-alert{max-width:720px;margin:4px auto 12px;padding:12px 16px;border:1px solid var(--dn);border-radius:10px;background:var(--sf)}.deadline-alert strong{display:block}.deadline-alert ul{margin:7px 0;padding-left:20px}.deadline-alert li{margin:3px 0}.deadline-alert .btn{margin-top:6px}.deadline-alert .x{color:var(--mut)}
+#install-app{font-size:14px;padding:8px 12px;margin:8px 0 0}
+#pwa-update{border-color:var(--ol)}
+</style>
+</head>
+<body>
+<header>
+<h1>Prezzi di stalla e caseificio</h1>
+<p class="sub">Entrate, uscite e quantità dell’azienda, con prezzi e preventivi a portata di mano.</p>
+<p class="sub" style="font-size:12px">Versione <span id="app-version"></span> · <span id="save-status" role="status">Apertura archivio…</span></p>
+<p class="sub" id="offline-status" style="display:none;font-size:13px">Modalità offline: i dati locali restano disponibili. I collegamenti esterni richiedono Internet.</p>
+<button class="btn s" id="install-app" type="button" hidden>Installa l’app</button>
+</header>
+<div class="menu-wrap"><nav id="nav" aria-label="Menu principale"></nav></div>
+<div id="deadline-alert" class="deadline-alert" role="status" aria-live="polite" style="display:none"></div>
+<div id="pwa-update" class="deadline-alert" role="status" hidden><strong>Nuova versione dell’app disponibile.</strong><button class="btn s" id="apply-update" type="button">Aggiorna l’app</button></div>
+<div id="storage-warning" role="alert" style="display:none;max-width:720px;margin:8px auto;padding:12px 16px;background:#fff0dd;color:#633b00;border-radius:8px">Il browser non riesce a salvare i dati. Scarica una copia di sicurezza dalla scheda Dati prima di chiudere la pagina.</div>
+<main id="main"></main>
+<button class="fab" id="fab">+ Nuovo prezzo</button>
+
+<script>
+const APP_VERSION='2026.10.25.4';
+const CATS={
+ animali:{t:'Animali',h:'Prezzi di vendita',unita:['€/kg vivo','€/capo','€/kg macellato'],voci:['Agnello da latte','Agnellone','Pecora da riforma','Capretto','Capra da riforma','Vitello da ingrasso','Vitellone','Vacca da riforma','Vacca podolica da riforma']},
+ formaggi:{t:'Formaggi',h:'Prezzi di vendita',unita:['€/kg','€/pezzo'],voci:['Caciocavallo','Caciocavallo podolico','Ricotta fresca','Ricotta forte','Pecorino','Formaggio caprino','Scamorza','Mozzarella','Provola','Latte alimentare']},
+ mangimi:{t:'Mangimi',h:'Prezzi di acquisto',unita:['€/q','€/kg','€/t','€/balla'],voci:['Fieno','Paglia','Mangime ovini','Mangime caprini','Mangime bovini','Orzo','Mais','Crusca','Farina di soia','Nucleo/integratore']}
+};
+const IS='https://www.ismeamercati.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/';
+const LINKS={
+ animali:[
+  ['Ovini e caprini: prezzi per piazza (Foggia)',IS+'817','Agnelli 8-12 kg, agnelloni 20-30 kg, pecore. Settimanale, franco azienda.'],
+  ['Agnelli: tutte le piazze',IS+'1083','Confronto Foggia, Napoli, Noci, Cagliari e altre.'],
+  ['Carni ovicaprine all’ingrosso (Foggia)',IS+'819','Agnello, agnellone e pecora macellati.'],
+  ['Vitelloni: prezzi medi Italia',IS+'1850','Per razza, €/kg peso vivo. Foggia non è tra le piazze bovine.'],
+  ['Vacche da riforma',IS+'1128','Per piazza e qualità.'],
+  ['Vitelli',IS+'1127','Per piazza e razza.'],
+  ['Carne bovina: ultime quotazioni','https://www.ismeamercati.it/carni/carne-bovina','Pagina di partenza con le ultime rilevazioni.']],
+ formaggi:[
+  ['Pecorino, caciotta e ricotta (Foggia)',IS+'3068','Ricotta di pecora e mista, caciotta, pecorino fresco e stagionato.'],
+  ['Mozzarella (Foggia)',IS+'680','Latte e derivati bovini, prezzi per piazza.'],
+  ['Derivati ovicaprini: prezzi medi mensili',IS+'3075','Media nazionale, utile per il confronto.']],
+ mangimi:[
+  ['Borsa Merci di Foggia: ultimo listino','https://www.fg.camcom.it/servizi/borsa-merci-prodotti-cerealicoli','Pagina ufficiale aggiornata: premi “Scarica l’ultimo listino” per aprire il PDF più recente di cereali, foraggi e cruscami.'],
+  ['Borsa Merci di Foggia: archivio listini','https://www.fg.camcom.it/servizi/storico-dei-listini-settimanali','Listini settimanali precedenti, ordinati dal più recente al più vecchio.']]
+};
+function linksBox(cat){
+ return `<details class="lk"><summary>Prezzi ufficiali: apri i collegamenti</summary><ul>${LINKS[cat].map(l=>`<li><a href="${l[1]}" target="_blank" rel="noopener">${l[0]}</a><small>${l[2]}</small></li>`).join('')}</ul></details>`;
+}
+let S={e:[],c:[],ct:false,tab:'conti',contiView:'panoramica',lastPrice:'animali',open:false,editC:null};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const eur=n=>n.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+const oggi=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)};
+const fd=d=>d.split('-').reverse().join('/');
+const dataValida=d=>typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)&&!Number.isNaN(Date.parse(d))&&new Date(d+'T12:00:00').toISOString().slice(0,10)===d;
+const ARCHIVE_DB='prezzi-stalla-caseificio',ARCHIVE_STORE='archivio',ARCHIVE_KEYS=['pa_e','pa_c','pa_v','pa_cc','pa_quote','pa_adv','pa_az','pa_last_backup'];
+let archiveDb=null,archiveCache={},archiveLoading=true,archiveChangedDuringLoad=false,archiveGeneration=0,archiveCommitted=0,archiveRevision=0,archiveWorker=null,archiveFailed=false;
+function storageStatus(t){const el=$('#save-status');if(el)el.textContent=t}
+function storageError(message){archiveFailed=true;storageStatus('Salvataggio non riuscito');const el=$('#storage-warning');if(el){el.style.display='block';el.textContent=message||'Il browser non riesce a salvare i dati. Scarica una copia JSON dalla scheda Dati prima di chiudere la pagina.'}}
+function readStored(k){return Object.hasOwn(archiveCache,k)?archiveCache[k]:null}
+function legacyArchive(){const out={};try{for(const k of ARCHIVE_KEYS){const v=localStorage.getItem(k);if(v!==null)out[k]=v}}catch(x){}return out}
+function openArchive(){return new Promise((resolve,reject)=>{if(!('indexedDB' in window)){reject(Error('IndexedDB non disponibile'));return}const r=indexedDB.open(ARCHIVE_DB,1);r.onupgradeneeded=()=>{if(!r.result.objectStoreNames.contains(ARCHIVE_STORE))r.result.createObjectStore(ARCHIVE_STORE)};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error||Error('Apertura archivio non riuscita'));r.onblocked=()=>storageStatus('Archivio bloccato da un’altra scheda')})}
+function readArchive(){return new Promise((resolve,reject)=>{const tx=archiveDb.transaction(ARCHIVE_STORE,'readonly'),r=tx.objectStore(ARCHIVE_STORE).get('main');r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>reject(r.error||Error('Lettura archivio non riuscita'))})}
+function writeArchive(values){return new Promise((resolve,reject)=>{const tx=archiveDb.transaction(ARCHIVE_STORE,'readwrite'),store=tx.objectStore(ARCHIVE_STORE),r=store.get('main');let nextRevision;
+ r.onsuccess=()=>{const current=Number.isSafeInteger(r.result?.revision)?r.result.revision:0;if(current!==archiveRevision){tx.abort();reject(Error('Archivio modificato in un’altra scheda: questa modifica non è stata salvata. Scarica una copia JSON dalla scheda Dati prima di ricaricare la pagina.'));return}nextRevision=current+1;store.put({values,revision:nextRevision},'main')};
+ r.onerror=()=>reject(r.error||Error('Lettura archivio non riuscita'));tx.oncomplete=()=>{archiveRevision=nextRevision;resolve()};tx.onerror=()=>reject(tx.error||Error('Salvataggio archivio non riuscito'));tx.onabort=()=>reject(tx.error||Error('Salvataggio archivio interrotto'))})}
+function queueArchiveSave(){
+ if(archiveLoading)return;
+ if(!archiveDb){storageError();return}
+ archiveGeneration++;archiveFailed=false;storageStatus('Salvataggio in corso…');
+ if(archiveWorker)return;
+ archiveWorker=(async()=>{await Promise.resolve();while(archiveCommitted<archiveGeneration){const target=archiveGeneration,values={...archiveCache};await writeArchive(values);archiveCommitted=target}storageStatus('Archivio salvato in questo browser');$('#storage-warning').style.display='none';return true})().catch(e=>{storageError(e?.message);return false}).finally(()=>{archiveWorker=null;if(!archiveFailed&&archiveCommitted<archiveGeneration)queueArchiveSave()});
+}
+function persist(k,v){try{const value=JSON.stringify(v);if(archiveCache[k]===value){if(archiveFailed&&!archiveLoading)queueArchiveSave();return !archiveFailed}archiveCache[k]=value;if(archiveLoading)archiveChangedDuringLoad=true;else queueArchiveSave();return !archiveFailed}catch(x){storageError();return false}}
+function load(){try{S.e=JSON.parse(readStored('pa_e')||'[]')}catch(x){S.e=[]}
+ try{S.c=JSON.parse(readStored('pa_c')||'[]')}catch(x){S.c=[]}}
+function save(){persist('pa_e',S.e);persist('pa_c',S.c)}
+function tabs(){
+ const group=CATS[S.tab]?'prezzi':['conti','capi','resa','agevolazioni'].includes(S.tab)?'azienda':S.tab==='prev'?'prev':S.tab==='scadenzario'?'scadenzario':'dati';
+ const menu=(k,l,items)=>`<details class="menu-group ${group===k?'selected':''}"><summary>${l} ▾</summary><div class="menu-pop">${items.map(([id,n])=>`<button type="button" aria-current="${S.tab===id?'page':'false'}" data-t="${id}">${n}</button>`).join('')}</div></details>`;
+ $('#nav').innerHTML=menu('prezzi','Prezzi',Object.keys(CATS).map(k=>[k,CATS[k].t]))+menu('azienda','Azienda',[['conti','Conti'],['resa','Resa del latte'],['agevolazioni','Agevolazioni']])+`<button type="button" aria-current="${group==='prev'?'page':'false'}" data-t="prev">Preventivi</button><button type="button" aria-current="${group==='scadenzario'?'page':'false'}" data-t="scadenzario">Scadenzario</button><button type="button" aria-current="${group==='dati'?'page':'false'}" data-t="dati">Dati</button>`;
+ const go=k=>{S.tab=k;if(CATS[k])S.lastPrice=k;S.open=false;S.ct=false;S.editC=null;S.pay=false;S.payEdit=null;S.rimEdit=null;S.rimOpen=false;S.scadEdit=null;S.gv=false;S.gvi=null;S.gc=false;S.gci=null;S.ep=null;S.od=null;S.capEd=null;draw()};
+ $('#nav').onclick=e=>{const b=e.target.closest('[data-t]');if(b)go(b.dataset.t)};
+ $('#nav').querySelectorAll('.menu-group').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)$('#nav').querySelectorAll('.menu-group').forEach(other=>{if(other!==d)other.open=false})}));
+}
+function spark(v){
+ if(v.length<2)return '';
+ const w=64,h=24,mn=Math.min(...v),mx=Math.max(...v),r=mx-mn||1;
+ const p=v.map((y,i)=>`${(i/(v.length-1)*w).toFixed(1)},${(h-2-(y-mn)/r*(h-4)).toFixed(1)}`).join(' ');
+ return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline fill="none" stroke="var(--sea)" stroke-width="2" points="${p}"/></svg>`;
+}
+function lista(cat){
+ const C=CATS[cat];
+ if(S.gv===cat)return `<h2>${C.h}</h2>${gestV(cat)}`;
+ const items=S.e.filter(x=>x.cat===cat);
+ const nomi=[...new Set(items.map(x=>x.voce))];
+ let h=`<h2>${C.h}</h2><button class="btn s" data-gv type="button" style="margin:0 0 12px">Apri gestione voci</button>`+linksBox(cat);
+ if(!nomi.length)h+='<p class="empty">Nessun prezzo registrato. Tocca “Aggiungi prezzo” su una voce o “Nuovo prezzo” per iniziare.</p>';
+ nomi.sort((a,b)=>a.localeCompare(b,'it'));
+ for(const n of nomi){
+  const h2=items.filter(x=>x.voce===n).sort((a,b)=>a.data<b.data?1:a.data>b.data?-1:b.id-a.id);
+  const l=h2[0],p=h2.slice(1).find(x=>x.unita===l.unita)||null;
+  let d='';
+  if(p){const delta=l.prezzo-p.prezzo,pc=p.prezzo?(delta/p.prezzo*100):null,cls=delta>0?'up':delta<0?'dn':'';d=`<span class="d ${cls}">${delta>0?'▲ +':delta<0?'▼ −':'='}${eur(Math.abs(delta))} €${pc!==null?` · ${pc>0?'+':''}${eur(pc)}%`:''}</span>`}
+  const vals=h2.filter(x=>x.unita===l.unita).slice(0,8).reverse().map(x=>x.prezzo);
+  h+=`<details class="row" ${S.od===cat+'|'+n?'open':''}><summary><div class="nm">${esc(n)}<small>${fd(l.data)}${l.nota?' · '+esc(l.nota):''}</small></div>${spark(vals)}<div class="pr">${eur(l.prezzo)}<small>${esc(l.unita)} ${d}</small></div></summary>
+  <div class="hist"><table>${h2.map(x=>histRow(x,cat,n)).join('')}</table></div></details>`;
+ }
+ const senza=C.voci.filter(v=>!nomi.includes(v));
+ if(senza.length)h+='<h2>Senza prezzo</h2>'+senza.map(v=>`<div class="row" style="padding:12px 14px;display:flex;align-items:center;gap:10px"><div class="nm">${esc(v)}<small>nessun prezzo</small></div><button class="x" style="color:var(--sea)" type="button" data-ap="${esc(v)}">Aggiungi prezzo</button></div>`).join('');
+ return h;
+}
+function form(){
+ const C=CATS[S.tab]||CATS.animali,k=CATS[S.tab]?S.tab:'animali';
+ return `<form id="f"><h2 style="margin-top:0">Nuovo prezzo</h2>
+ <label for="fc">Categoria</label><select id="fc">${Object.keys(CATS).map(c=>`<option value="${c}" ${c===k?'selected':''}>${CATS[c].t}</option>`).join('')}</select>
+ <label for="fv">Voce</label><select id="fv"></select>
+ <input id="fa" placeholder="Scrivi il nome" style="display:none;margin-top:8px">
+ <div class="g2"><div><label for="fp">Prezzo (€)</label><input id="fp" type="number" step="0.01" min="0" inputmode="decimal" required></div>
+ <div><label for="fu">Unità</label><select id="fu"></select></div></div>
+ <label for="fd">Data</label><input id="fd" type="date" value="${oggi()}" required>
+ <label for="fn">Acquirente o fornitore (facoltativo)</label><input id="fn">
+ <button class="btn" type="submit">Salva prezzo</button><button class="btn s" type="button" id="cx">Annulla</button></form>`;
+}
+function bindForm(){
+ const fc=$('#fc'),fv=$('#fv'),fu=$('#fu'),fa=$('#fa');
+ const fill=()=>{const C=CATS[fc.value];
+  fv.innerHTML=C.voci.map(v=>`<option>${esc(v)}</option>`).join('')+'<option value="__altro">Altra voce…</option>';
+  fu.innerHTML=C.unita.map(u=>`<option>${esc(u)}</option>`).join('');fa.style.display='none'};
+ fill();if(S.pre){fv.value=S.pre.voce;S.pre=null}fc.onchange=fill;
+ fv.onchange=()=>{fa.style.display=fv.value==='__altro'?'block':'none';if(fv.value==='__altro')fa.focus()};
+ $('#cx').onclick=()=>{S.open=false;draw()};
+ $('#f').onsubmit=ev=>{ev.preventDefault();
+  const voce=fv.value==='__altro'?fa.value.trim():fv.value;
+  const prezzo=parseFloat($('#fp').value);
+  if(!voce||isNaN(prezzo))return;
+  if(fv.value==='__altro'&&!CATS[fc.value].voci.some(v=>v.toLowerCase()===voce.toLowerCase())){CATS[fc.value].voci.push(voce);saveV()}
+  S.e.push({id:Date.now(),cat:fc.value,voce,prezzo,unita:fu.value,data:$('#fd').value,nota:$('#fn').value.trim()});
+  save();S.tab=fc.value;S.open=false;draw()};
+}
+function ultimo(cat,voce){
+ return S.e.filter(x=>x.cat===cat&&x.voce===voce).sort((a,b)=>b.data.localeCompare(a.data)||Number(b.id)-Number(a.id))[0];
+}
+function ultimoFormaggioKg(voce){const nome=String(voce).trim().toLocaleLowerCase('it');return S.e.filter(x=>x.cat==='formaggi'&&x.voce.trim().toLocaleLowerCase('it')===nome&&x.unita==='€/kg').sort((a,b)=>b.data.localeCompare(a.data)||Number(b.id)-Number(a.id))[0]}
+const CC={uscite:['Mangime e foraggi','Veterinario','Manodopera','Carburante','Energia','Affitto/pascolo','Altro'],entrate:['Vendita animali','Vendita formaggi','Contributi','Altro']};
+const MAPP={'Mangime e foraggi':'mangimi','Vendita animali':'animali','Vendita formaggi':'formaggi'};
+function unitaQuantita(um){const u=String(um||'').trim();if(!u.startsWith('€/'))return u;const nome=u.slice(2);return {capo:'capi',pezzo:'pezzi',balla:'balle'}[nome]||nome}
+function chiaveProdotto(v){return String(v||'').trim().toLocaleLowerCase('it')}
+function produzioneDaRimanenza(r){
+ const precedente=(ADV.rimanenze||[]).find(x=>x.anno===r.anno-1&&chiaveProdotto(x.prodotto)===chiaveProdotto(r.prodotto));
+ const iniziale=precedente?Number(precedente.finale):r.iniziale;
+ const vendite=S.c.filter(x=>x.tipo==='e'&&MAPP[x.cat]==='formaggi'&&Number(x.data.slice(0,4))===r.anno&&chiaveProdotto(x.art)===chiaveProdotto(r.prodotto));
+ let venduto=0,incomplete=0;for(const x of vendite){const q=Number(x.qta);if(unitaQuantita(x.um)==='kg'&&Number.isFinite(q)&&q>0)venduto+=q;else incomplete++}
+ const kg=venduto+Number(r.altreUscite||0)+Number(r.finale)-Number(iniziale)-Number(r.acquisti||0);
+ return {iniziale,venduto,incomplete,kg,calcolabile:iniziale!==null&&iniziale!==undefined&&Number.isFinite(Number(iniziale))&&Number(iniziale)>=0&&Number.isFinite(kg)&&kg>=-1e-8,precedente:!!precedente};
+}
+function righeQuantita(ya,yb){
+ const gruppi=new Map();
+ const aggiungi=(tipo,cat,voce,unita,anno,quantita,zeroValido=false)=>{if(anno!==ya&&anno!==yb)return;const key=JSON.stringify([tipo,cat,voce,unita]);if(!gruppi.has(key))gruppi.set(key,{tipo,cat,voce,unita,a:{somma:0,n:0,mancanti:0},b:{somma:0,n:0,mancanti:0}});const r=gruppi.get(key);for(const [k,y] of [['a',ya],['b',yb]])if(anno===y){r[k].n++;if(Number.isFinite(quantita)&&(quantita>0||zeroValido&&quantita===0))r[k].somma+=quantita;else r[k].mancanti++}};
+ S.c.forEach(x=>aggiungi(x.tipo,x.cat||'(senza categoria)',x.art||'(senza voce)',unitaQuantita(x.um),Number(x.data.slice(0,4)),x.qta===undefined?NaN:Number(x.qta)));
+ (ADV.capi||[]).forEach(v=>{const x=S.c.find(c=>c.id===v.cid);if(x&&unitaQuantita(x.um)!=='capi')aggiungi('e',x.cat,x.art||v.voce,'capi',Number(v.data.slice(0,4)),Number(v.n))});
+ const rimanenze=ADV.rimanenze||[],chiusure=new Set(rimanenze.map(x=>JSON.stringify([x.anno,chiaveProdotto(x.prodotto)])));
+ (ADV.produzione||[]).forEach(x=>{const anno=Number(x.data.slice(0,4));if(!chiusure.has(JSON.stringify([anno,chiaveProdotto(x.prodotto)])))aggiungi('p','Formaggi prodotti',x.prodotto||'(senza voce)','kg',anno,Number(x.kg));if(Number(x.litri)>0)aggiungi('p','Latte lavorato',x.prodotto||'(senza voce)','l',anno,Number(x.litri))});
+ rimanenze.forEach(x=>{const p=produzioneDaRimanenza(x);aggiungi('p','Formaggi prodotti',x.prodotto,'kg',x.anno,p.calcolabile?Math.max(0,p.kg):NaN,true);if(p.incomplete)aggiungi('p','Formaggi prodotti',x.prodotto,'kg',x.anno,NaN)});
+ return [...gruppi.values()].sort((a,b)=>a.tipo.localeCompare(b.tipo,'it')||a.cat.localeCompare(b.cat,'it')||a.voce.localeCompare(b.voce,'it')||a.unita.localeCompare(b.unita,'it'));
+}
+function prospettoQuantita(ya,yb){
+ const righe=righeQuantita(ya,yb),valore=o=>o.n===0?'0,00':o.mancanti===o.n?'—':eur(o.somma)+(o.mancanti?' *':''),delta=r=>r.a.mancanti||r.b.mancanti?'—':`${r.a.somma-r.b.somma>0?'+':''}${eur(r.a.somma-r.b.somma)}`;
+ const tabella=(tipo,titolo)=>{const v=righe.filter(r=>r.tipo===tipo);return `<h3 style="margin:16px 0 6px;font-size:16px">${titolo}</h3>${v.length?`<div class="compare-wrap"><table class="compare quantity-detail"><thead><tr><th>Categoria</th><th>Voce</th><th>Unità</th><th>${ya}</th><th>${yb}</th><th>Differenza</th></tr></thead><tbody>${v.map(r=>`<tr><td>${esc(r.cat)}</td><td>${esc(r.voce)}</td><td>${esc(r.unita||'—')}</td><td>${valore(r.a)}</td><td>${valore(r.b)}</td><td>${delta(r)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="empty">Nessuna registrazione per gli anni selezionati.</p>'}`};
+ const nomi=[...new Set(righe.filter(r=>r.unita==='kg'&&(r.cat==='Formaggi prodotti'||r.cat==='Vendita formaggi')).map(r=>r.voce))].sort((a,b)=>a.localeCompare(b,'it'));
+ const prodotto=(nome,cat,anno)=>{const r=righe.find(x=>x.voce===nome&&x.cat===cat&&x.unita==='kg');return r?valore(r[anno]):'0,00'};
+ const confronto=nomi.length?`<h3 style="margin:16px 0 6px;font-size:16px">Formaggi: prodotti e venduti (kg)</h3><div class="compare-wrap"><table class="compare"><thead><tr><th>Prodotto</th><th>Prodotti ${ya}</th><th>Venduti ${ya}</th><th>Prodotti ${yb}</th><th>Venduti ${yb}</th></tr></thead><tbody>${nomi.map(n=>`<tr><td>${esc(n)}</td><td>${prodotto(n,'Formaggi prodotti','a')}</td><td>${prodotto(n,'Vendita formaggi','a')}</td><td>${prodotto(n,'Formaggi prodotti','b')}</td><td>${prodotto(n,'Vendita formaggi','b')}</td></tr>`).join('')}</tbody></table></div><p class="note">“Prodotti” usa la chiusura annuale delle rimanenze, quando presente, oppure le quantità registrate direttamente in Conti. Le quantità vendute provengono dalle entrate in kg.</p>`:'';
+ return `<h2>Confronto delle quantità</h2><p class="note">Per categoria e singola voce, con le stesse annualità scelte sopra. Le unità diverse restano separate. “—” indica una quantità non disponibile; * segnala un totale parziale, per esempio vendite prive di kg.</p>${tabella('e','Quantità vendute e altre entrate')}${tabella('u','Quantità acquistate e altre uscite')}${tabella('p','Produzione registrata o ricostruita')}${confronto}`;
+}
+function panoramicaConti(){
+ const [anno,mese]=oggi().slice(0,7).split('-').map(Number);
+ const periodo=y=>S.c.filter(x=>Number(x.data.slice(0,4))===y&&Number(x.data.slice(5,7))<=mese);
+ const attuali=periodo(anno),precedenti=periodo(anno-1);
+ const totale=(righe,tipo)=>righe.filter(x=>x.tipo===tipo).reduce((s,x)=>s+Number(x.importo||0),0);
+ const a={e:totale(attuali,'e'),u:totale(attuali,'u')},b={e:totale(precedenti,'e'),u:totale(precedenti,'u')};a.s=a.e-a.u;b.s=b.e-b.u;
+ const differenza=v=>`${v>0?'+':''}${eur(v)} €`;
+ const metrica=(titolo,ora,prima,classe)=>`<div class="dashboard-metric"><span>${titolo}</span><strong class="${classe}">${eur(ora)} €</strong><small>${anno-1}: ${eur(prima)} € · Δ ${differenza(ora-prima)}</small></div>`;
+ const mesi=Array.from({length:12},(_,i)=>{const d=new Date(anno,mese-12+i,1),chiave=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;return {chiave,nome:d.toLocaleDateString('it-IT',{month:'short'}),anno:d.getFullYear(),e:totale(S.c.filter(x=>x.data.slice(0,7)===chiave),'e'),u:totale(S.c.filter(x=>x.data.slice(0,7)===chiave),'u')}});
+ const massimo=Math.max(1,...mesi.flatMap(x=>[x.e,x.u]));
+ const grafico=mesi.map(x=>`<div class="trend-month"><div class="trend-bars"><span class="trend-bar in" style="height:${Math.max(2,Math.round(x.e/massimo*90))}px" title="${esc(x.nome)} ${x.anno}: entrate ${eur(x.e)} €"></span><span class="trend-bar out" style="height:${Math.max(2,Math.round(x.u/massimo*90))}px" title="${esc(x.nome)} ${x.anno}: uscite ${eur(x.u)} €"></span></div><div>${esc(x.nome)}</div><small>${x.anno}</small></div>`).join('');
+ const spese=new Map();for(const [elenco,campo] of [[attuali,'a'],[precedenti,'b']])for(const x of elenco)if(x.tipo==='u'){const r=spese.get(x.cat)||{cat:x.cat,a:0,b:0};r[campo]+=Number(x.importo||0);spese.set(x.cat,r)}
+ const variazioni=[...spese.values()].filter(x=>x.a!==x.b).sort((x,z)=>Math.abs(z.a-z.b)-Math.abs(x.a-x.b)).slice(0,3);
+ const nomeMese=new Date(anno,mese-1,1).toLocaleDateString('it-IT',{month:'long'});
+ const incassi=(ADV.scadenze||[]).filter(x=>x.tipo==='incasso'&&!x.completata),incassiConImporto=incassi.filter(x=>x.importo!==null&&x.importo!==undefined&&Number.isFinite(Number(x.importo))),totaleDaIncassare=incassiConImporto.reduce((s,x)=>s+Number(x.importo),0),scaduti=incassi.filter(x=>x.data<oggi()).length;
+ const daIncassare=incassi.length?`<div class="card"><h3 style="margin:0 0 8px;font-size:17px">Da incassare · ${incassi.length} ${incassi.length===1?'scadenza':'scadenze'}</h3><strong class="res">${incassiConImporto.length?eur(totaleDaIncassare)+' €':'Importo non indicato'}</strong><p class="note">Importi previsti nello Scadenzario${incassi.length>incassiConImporto.length?` · ${incassi.length-incassiConImporto.length} senza importo`:''}${scaduti?` · ${scaduti} ${scaduti===1?'scaduta':'scadute'}`:''}. Non sono inclusi nelle entrate o nel saldo.</p><button class="btn s" type="button" id="openReceivables">Apri Scadenzario</button></div>`:'';
+ return `<h2>Andamento dell’attività</h2><div class="card"><p class="note">Da gennaio a ${nomeMese} ${anno}, confrontato con lo stesso periodo del ${anno-1}.</p><div class="dashboard-metrics">${metrica('Entrate',a.e,b.e,'up')}${metrica('Uscite',a.u,b.u,'dn')}${metrica('Saldo',a.s,b.s,a.s<0?'dn':'up')}</div><h3 style="margin:20px 0 0;font-size:16px">Ultimi 12 mesi</h3><div class="trend-key"><span>Entrate</span><span class="out">Uscite</span></div><div class="trend-scroll"><div class="trend-chart" role="img" aria-label="Entrate e uscite mensili degli ultimi 12 mesi">${grafico}</div></div><details class="lk" style="margin-top:14px"><summary>Principali variazioni di spesa</summary>${variazioni.length?`<div class="compare-wrap"><table class="compare"><thead><tr><th>Categoria</th><th>${anno} (€)</th><th>${anno-1} (€)</th><th>Differenza (€)</th></tr></thead><tbody>${variazioni.map(x=>`<tr><td>${esc(x.cat)}</td><td>${eur(x.a)}</td><td>${eur(x.b)}</td><td>${differenza(x.a-x.b)}</td></tr>`).join('')}</tbody></table></div>`:'<p class="note">Nessuna variazione di spesa registrata.</p>'}</details><p class="note">Il saldo è la differenza tra entrate e uscite registrate; non rappresenta l’utile fiscale.</p></div>${daIncassare}`;
+}
+function venditePerProdotto(anni){
+ const anno=anni.includes(Number(S.vy))?Number(S.vy):Number(oggi().slice(0,4));S.vy=anno;
+ const vendite=S.c.filter(x=>x.tipo==='e'&&Number(x.data.slice(0,4))===anno&&['animali','formaggi'].includes(MAPP[x.cat]));
+ const senzaProdotto=vendite.filter(x=>!x.art).length,gruppi=new Map();
+ for(const x of vendite){if(!x.art)continue;const tipo=MAPP[x.cat],unita=String(x.um||''),art=x.art.trim(),chiave=JSON.stringify([tipo,art.toLocaleLowerCase('it'),unita]);if(!gruppi.has(chiave))gruppi.set(chiave,{tipo,art,unita,ricavi:0,quantita:0,ricaviConQuantita:0,mancanti:0});const r=gruppi.get(chiave),q=Number(x.qta);r.ricavi+=Number(x.importo||0);if(Number.isFinite(q)&&q>0){r.quantita+=q;r.ricaviConQuantita+=Number(x.importo||0)}else r.mancanti++}
+ const righe=[...gruppi.values()].sort((a,b)=>b.ricavi-a.ricavi||a.art.localeCompare(b.art,'it'));
+ const prezzoListino=r=>S.e.filter(x=>x.cat===r.tipo&&x.voce.trim().toLocaleLowerCase('it')===r.art.trim().toLocaleLowerCase('it')&&x.unita===r.unita).sort((a,b)=>b.data.localeCompare(a.data)||Number(b.id)-Number(a.id))[0];
+ const corpo=righe.map(r=>{const medio=r.quantita>0?r.ricaviConQuantita/r.quantita:null,listino=prezzoListino(r),delta=medio!==null&&listino?medio-listino.prezzo:null;return `<tr><td>${r.tipo==='animali'?'Animali':'Formaggi'}</td><td>${esc(r.art)}</td><td>${r.quantita>0?eur(r.quantita)+(r.mancanti?' *':''):'—'} ${esc(unitaQuantita(r.unita)||'')}</td><td>${eur(r.ricavi)}</td><td>${medio===null?'—':eur(medio)}</td><td>${listino?`${eur(listino.prezzo)}<small class="note" style="display:block">${fd(listino.data)}</small>`:'—'}</td><td class="${delta===null?'':delta<0?'dn':'up'}">${delta===null?'—':`${delta>0?'+':''}${eur(delta)}`}</td></tr>`}).join('');
+ return `<h2>Vendite per prodotto</h2><label>Anno delle vendite<select id="vy">${anni.map(y=>`<option value="${y}" ${y===anno?'selected':''}>${y}</option>`).join('')}</select></label><div class="card"><p class="note">Ricavi e quantità delle vendite di animali e formaggi registrate nei Conti. Il prezzo medio effettivo è ricavi ÷ quantità; il confronto usa l’ultimo prezzo del listino con la stessa unità.</p>${righe.length?`<div class="compare-wrap"><table class="compare"><thead><tr><th>Categoria</th><th>Prodotto</th><th>Quantità</th><th>Ricavi (€)</th><th>Medio (€/unità)</th><th>Listino (€/unità)</th><th>Scarto (€)</th></tr></thead><tbody>${corpo}</tbody></table></div>`:'<p class="empty">Nessuna vendita di animali o formaggi con prodotto indicato per questo anno.</p>'}${righe.some(x=>x.mancanti)?'<p class="note">* Quantità parziale: alcune vendite non hanno la quantità. Il prezzo medio usa solo le vendite con quantità.</p>':''}${senzaProdotto?`<p class="note">${senzaProdotto} vendite senza prodotto non sono incluse nella tabella.</p>`:''}</div>`;
+}
+function controlliDati(){
+ const problemi=[],senzaListino=new Set(),mensilita=new Map();
+ for(const x of S.c){const gruppo=MAPP[x.cat],art=String(x.art||'').trim(),unita=String(x.um||'');
+  if(x.tipo==='e'&&gruppo==='formaggi'){if(!art)problemi.push({testo:`Vendita formaggi del ${fd(x.data)} senza prodotto.`,tipo:'conto',id:x.id});if(unitaQuantita(unita)!=='kg'||!(Number(x.qta)>0))problemi.push({testo:`Vendita formaggi del ${fd(x.data)} senza quantità in kg.`,tipo:'conto',id:x.id})}
+  if(x.tipo==='e'&&['formaggi','animali'].includes(gruppo)&&art&&unita&&!S.e.some(p=>p.cat===gruppo&&chiaveProdotto(p.voce)===chiaveProdotto(art)&&p.unita===unita)){const chiave=JSON.stringify([gruppo,chiaveProdotto(art),unita]);if(!senzaListino.has(chiave)){problemi.push({testo:`${art}: nessun prezzo nel listino ${gruppo} per ${unita}.`,tipo:'listino',id:gruppo});senzaListino.add(chiave)}}
+  if(x.dipendente&&x.competenza){const chiave=`${x.dipendente.trim().toLocaleLowerCase('it')}|${x.competenza}`;if(mensilita.has(chiave))problemi.push({testo:`Mensilità duplicata: ${x.dipendente}, ${x.competenza}.`,tipo:'paga',id:x.id});else mensilita.set(chiave,x.id)}
+ }
+ for(const r of ADV.rimanenze||[]){const p=produzioneDaRimanenza(r);if(!p.calcolabile)problemi.push({testo:`Rimanenza ${r.prodotto} ${r.anno}: produzione non calcolabile o negativa.`,tipo:'rimanenza',id:r.id});else if(p.incomplete)problemi.push({testo:`Rimanenza ${r.prodotto} ${r.anno}: ${p.incomplete} vendite senza kg; produzione parziale.`,tipo:'rimanenza',id:r.id})}
+ if(copiaDaFare())problemi.push({testo:'Copia di sicurezza mancante o risalente a più di 30 giorni fa.',tipo:'dati',id:''});
+ const bottone=p=>`<button class="x" type="button" style="color:var(--sea)" data-check="${p.tipo}|${p.id}">${p.tipo==='dati'?'Apri Dati':p.tipo==='listino'?'Apri Prezzi':'Apri'}</button>`;
+ return `<details class="lk" style="margin:12px 0"><summary>Controlli dati · ${problemi.length} ${problemi.length===1?'segnalazione':'segnalazioni'}</summary>${problemi.length?`<div class="card"><p class="note">Questi controlli aiutano a trovare dati mancanti o incoerenti. Le segnalazioni non modificano le registrazioni.</p>${problemi.slice(0,30).map(p=>`<div class="row" style="padding:8px 12px;display:flex;align-items:center;gap:8px"><span class="nm">${esc(p.testo)}</span>${bottone(p)}</div>`).join('')}${problemi.length>30?`<p class="note">Sono mostrate le prime 30 di ${problemi.length} segnalazioni.</p>`:''}</div>`:'<p class="note">Nessuna delle anomalie controllate è stata rilevata.</p>'}</details>`;
+}
+function rimanenzeAnnuali(){
+ const elenco=ADV.rimanenze||[],ed=elenco.find(x=>x.id===S.rimEdit),prodotti=[...new Set([...CATS.formaggi.voci,...S.c.filter(x=>x.tipo==='e'&&MAPP[x.cat]==='formaggi'&&x.art).map(x=>x.art),...elenco.map(x=>x.prodotto)])].filter(p=>p&&chiaveProdotto(p)!=='latte alimentare').sort((a,b)=>a.localeCompare(b,'it'));
+ const voci=elenco.slice().sort((a,b)=>b.anno-a.anno||a.prodotto.localeCompare(b.prodotto,'it'));
+ return `<details class="lk" style="margin-top:14px" ${S.rimEdit||S.rimOpen?'open':''}><summary>Rimanenze annuali dei formaggi</summary><p class="note">Per ogni prodotto inserisci le giacenze in kg al 1° gennaio e al 31 dicembre. Dal secondo anno la giacenza iniziale deriva automaticamente dalla chiusura precedente. La produzione risulta da vendite in kg + altre uscite + giacenza finale − giacenza iniziale − acquisti di prodotto finito. La chiusura dell’anno in corso è provvisoria fino al 31 dicembre.</p>
+ <form id="frim"><h3 style="margin:0 0 8px;font-size:16px">${ed?'Modifica':'Registra'} chiusura annuale</h3><div class="g2"><label>Anno<input name="anno" type="number" min="2000" max="2100" step="1" value="${ed?.anno??Number(oggi().slice(0,4))}" ${ed?'readonly':''} required></label><label>Prodotto<select name="prodotto" ${ed?'disabled':''} required><option value="">Seleziona un prodotto</option>${prodotti.map(p=>`<option value="${esc(p)}" ${ed&&p===ed.prodotto?'selected':''}>${esc(p)}</option>`).join('')}</select></label></div>
+ <div class="g2"><label>Rimanenza iniziale (kg)<input name="iniziale" type="number" min="0" step="any" inputmode="decimal" value="${ed?.iniziale??''}" required></label><label>Rimanenza finale al 31/12 (kg)<input name="finale" type="number" min="0" step="any" inputmode="decimal" value="${ed?.finale??''}" required></label></div>
+ <div class="g2"><label>Altre uscite: autoconsumo, omaggi, scarti (kg)<input name="altreUscite" type="number" min="0" step="any" inputmode="decimal" value="${ed?.altreUscite??0}"></label><label>Prodotto finito acquistato (kg)<input name="acquisti" type="number" min="0" step="any" inputmode="decimal" value="${ed?.acquisti??0}"></label></div><p class="note" id="rimAnteprima"></p><button class="btn" type="submit">${ed?'Salva modifiche':'Salva rimanenza'}</button>${ed?'<button class="btn s" type="button" id="rimCancel">Annulla modifica</button>':''}<p class="note" id="rimMsg"></p></form>
+ ${voci.length?`<h3 style="font-size:16px">Chiusure registrate</h3>${voci.map(x=>{const p=produzioneDaRimanenza(x);return `<div class="row" style="padding:10px 14px;display:flex;gap:10px;align-items:center"><div class="nm">${esc(x.prodotto)} · ${x.anno}<small>Inizio ${p.iniziale===null||p.iniziale===undefined?'—':eur(Number(p.iniziale))} kg · fine ${eur(x.finale)} kg · venduti ${eur(p.venduto)} kg · prodotti ${p.calcolabile?eur(Math.max(0,p.kg))+(p.incomplete?' *':''):'—'} kg${p.incomplete?` · ${p.incomplete} vendite senza kg`:''}${!p.calcolabile?' · dati da verificare':''}</small></div><button class="x" type="button" style="color:var(--sea)" data-rimedit="${x.id}">Modifica</button><button class="x" type="button" data-rimdel="${x.id}">Elimina</button></div>`}).join('')}<p class="note">* Il totale è parziale se alcune vendite non hanno una quantità in kg. Una chiusura annuale sostituisce, nel confronto, eventuali produzioni inserite manualmente per lo stesso prodotto e anno.</p>`:'<p class="empty">Nessuna rimanenza annuale registrata.</p>'}</details>`;
+}
+function conti(){
+ if(S.gc)return gestC();
+ if(S.pay)return formDipendente();
+ if(S.ct)return formConto();
+ const y=Number(oggi().slice(0,4));
+ const righe=[...S.c].sort((a,b)=>a.data<b.data?1:a.data>b.data?-1:b.id-a.id).slice(0,60);
+ const anni=[...new Set([y,y-1,...S.c.map(x=>Number(x.data.slice(0,4))),...(ADV.produzione||[]).map(x=>Number(x.data.slice(0,4))),...(ADV.rimanenze||[]).map(x=>x.anno)])].filter(Number.isFinite).sort((a,b)=>b-a);
+ const ya=anni.includes(Number(S.ya))?Number(S.ya):y,yb=anni.includes(Number(S.yb))?Number(S.yb):y-1;S.ya=ya;S.yb=yb;
+ const stat=(year,month)=>{const mm=`${year}-${String(month).padStart(2,'0')}`,es=S.c.filter(x=>x.data.slice(0,7)===mm&&x.tipo==='e').reduce((s,x)=>s+Number(x.importo||0),0),usm=S.c.filter(x=>x.data.slice(0,7)===mm&&x.tipo==='u').reduce((s,x)=>s+Number(x.importo||0),0);return {es,us:usm,sa:es-usm}};
+ const annual=year=>Array.from({length:12},(_,i)=>stat(year,i+1)).reduce((a,x)=>({es:a.es+x.es,us:a.us+x.us,sa:a.sa+x.sa}),{es:0,us:0,sa:0});
+ const A=annual(ya),B=annual(yb),months=['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+ const cg=['tot','cat','art'].includes(S.cg)?S.cg:'cat';S.cg=cg;
+ const keyf=cg==='art'?(x=>x.art||'(senza articolo)'):cg==='cat'?(x=>x.cat):(()=>'Totale');
+ const sum=(year,tipo)=>{const o={};S.c.filter(x=>x.tipo===tipo&&x.data.slice(0,4)===String(year)).forEach(x=>{const k=keyf(x);o[k]=(o[k]||0)+Number(x.importo||0)});return o};
+ const dl=v=>`${v>0?'+':''}${eur(v)}`;
+ const tot=(o)=>Object.values(o).reduce((s,v)=>s+v,0);
+ const tabella=(tipo,tit)=>{const a=sum(ya,tipo),b=sum(yb,tipo),ks=[...new Set([...Object.keys(a),...Object.keys(b)])].sort((p,q)=>((a[q]||0)+(b[q]||0))-((a[p]||0)+(b[p]||0))),ta=tot(a),tb=tot(b);
+  const head=cg==='cat'?'Categoria':cg==='art'?'Articolo':'';
+  const rows=cg==='tot'?'':ks.map(k=>`<tr><td style="white-space:normal">${esc(k)}</td><td>${eur(a[k]||0)}</td><td>${eur(b[k]||0)}</td><td>${dl((a[k]||0)-(b[k]||0))}</td></tr>`).join('');
+  return `<h3 style="margin:20px 0 6px;font-size:17px">${tit}</h3><div class="compare-wrap"><table class="compare"><thead><tr><th>${head}</th><th>${ya} (€)</th><th>${yb} (€)</th><th>Differenza (€)</th></tr></thead><tbody>${rows}<tr><th>Totale ${tit.toLowerCase()}</th><th>${eur(ta)}</th><th>${eur(tb)}</th><th>${dl(ta-tb)}</th></tr></tbody></table></div>`};
+ const optA=v=>anni.map(n=>`<option ${n===v?'selected':''}>${n}</option>`).join('');
+ const annoBox=(anno,v)=>`<section class="year-box" aria-label="Riepilogo ${anno}"><h3>${anno}</h3><div class="year-row"><span>Entrate</span><strong class="up">${eur(v.es)} €</strong></div><div class="year-row"><span>Uscite</span><strong class="dn">${eur(v.us)} €</strong></div><div class="year-row balance"><span>Saldo</span><strong class="${v.sa<0?'dn':'up'}">${eur(v.sa)} €</strong></div></section>`;
+ const comp=`<h2>Confronto tra anni</h2><div class="g2"><label>Anno base<select id="ya">${optA(ya)}</select></label><label>Confronta con<select id="yb">${optA(yb)}</select></label></div><label>Mostra<select id="cg"><option value="tot" ${cg==='tot'?'selected':''}>Totale generale</option><option value="cat" ${cg==='cat'?'selected':''}>Per categoria</option><option value="art" ${cg==='art'?'selected':''}>Per articolo</option></select></label><div class="card" style="margin-top:12px"><div class="year-stats">${annoBox(ya,A)}${annoBox(yb,B)}</div><div class="balance-delta"><span>Differenza saldo ${ya} − ${yb}</span><strong class="${A.sa-B.sa<0?'dn':'up'}">${dl(A.sa-B.sa)} €</strong></div>${tabella('e','Entrate')}${tabella('u','Uscite')}<details class="lk" style="margin-top:12px"><summary>Dettaglio mese per mese</summary><div class="compare-wrap"><table class="compare"><thead><tr><th>Mese</th><th>Entrate ${ya}</th><th>Uscite ${ya}</th><th>Saldo ${ya}</th><th>Entrate ${yb}</th><th>Uscite ${yb}</th><th>Saldo ${yb}</th><th>Δ saldo</th></tr></thead><tbody>${months.map((n,i)=>{const a=stat(ya,i+1),b=stat(yb,i+1);return `<tr><td>${n}</td><td>${eur(a.es)}</td><td>${eur(a.us)}</td><td>${eur(a.sa)}</td><td>${eur(b.es)}</td><td>${eur(b.us)}</td><td>${eur(b.sa)}</td><td>${eur(a.sa-b.sa)}</td></tr>`}).join('')}</tbody></table></div></details></div>`;
+ const view=['panoramica','movimenti','quantita','confronti'].includes(S.contiView)?S.contiView:'panoramica';S.contiView=view;
+ const schede=[['panoramica','Panoramica'],['movimenti','Movimenti'],['quantita','Quantità e rimanenze'],['confronti','Confronti']];
+ const nav=`<nav class="conti-tabs" aria-label="Sezioni dei Conti">${schede.map(([id,nome])=>`<button type="button" data-conti-view="${id}" ${view===id?'aria-current="page"':''}>${nome}</button>`).join('')}</nav>`;
+ const azioni=`<div class="g2" style="margin-bottom:4px"><button class="btn" data-new="e">+ Entrata</button><button class="btn" data-new="u" style="background:var(--dn)">− Uscita</button></div><button class="btn s" type="button" id="newPay" style="margin:4px 0 12px">+ Mensilità dipendente</button>`;
+ const panoramica=`${panoramicaConti()}${controlliDati()}`;
+ const confronti=`${venditePerProdotto(anni)}${comp}
+ <button class="btn s" id="printAccounts" type="button">Stampa riepilogo ${ya}</button><span class="note" id="printAccountsMsg"></span>
+ `;
+ const quantita=`<div class="g2"><label>Anno base<select id="ya">${optA(ya)}</select></label><label>Confronta con<select id="yb">${optA(yb)}</select></label></div>${rimanenzeAnnuali()}${prospettoQuantita(ya,yb)}<button class="btn s" id="printQuantities" type="button">Stampa confronto quantità</button><span class="note" id="printQuantitiesMsg"></span>
+ 
+ <details class="lk" style="margin-top:10px"><summary>+ Registra quantità prodotta</summary><form id="fprod"><p class="note">Registrazione facoltativa per il confronto delle quantità. Non crea entrate o uscite. Se esiste una chiusura annuale per lo stesso prodotto e anno, i kg qui registrati restano salvati ma nel prospetto prevale la produzione ricostruita dalle rimanenze.</p><label>Prodotto<select name="prodotto" required>${CATS.formaggi.voci.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')}</select></label><div class="g2"><label>Data<input name="data" type="date" value="${oggi()}" required></label><label>Prodotto ottenuto (kg)<input name="kg" type="number" min="0.01" step="any" inputmode="decimal" required></label></div><label>Latte lavorato (litri, facoltativo)<input name="litri" type="number" min="0.01" step="any" inputmode="decimal"></label><button class="btn" type="submit">Registra quantità</button><p class="note" id="prodMsg"></p></form></details>
+ ${(ADV.produzione||[]).length?`<details class="lk" style="margin-top:10px"><summary>Quantità prodotte registrate (${ADV.produzione.length})</summary><p class="note">Quando esiste una chiusura annuale per lo stesso prodotto e anno, queste registrazioni restano salvate nei dati ma i kg non si sommano al prospetto: prevale il calcolo dalle rimanenze.</p>${[...ADV.produzione].sort((a,b)=>b.data.localeCompare(a.data)||b.id-a.id).slice(0,30).map(x=>`<div class="row" style="padding:10px 14px;display:flex;gap:10px;align-items:center"><div class="nm">${esc(x.prodotto)}<small>${fd(x.data)} · ${eur(x.kg)} kg${Number(x.litri)>0?' · '+eur(x.litri)+' l lavorati':''}</small></div><button class="x" type="button" data-proddel="${x.id}">Elimina</button></div>`).join('')}</details>`:''}
+ `;
+ const movimenti=`<details class="lk" style="margin-top:10px"><summary>Gestisci categorie</summary><button class="btn s" data-gc type="button" style="margin:6px 0 0">Apri gestione categorie</button></details>
+ <h2>Ultime righe</h2>${righe.length?righe.map(x=>{const collegata=ADV.capi.some(v=>v.cid===x.id);return `<div class="row" style="padding:10px 14px;display:flex;gap:10px;align-items:center"><div class="nm">${esc(x.cat)}${x.art?' · '+esc(x.art):''}<small>${fd(x.data)}${x.competenza?' · competenza '+esc(x.competenza):''}${x.pu!==undefined?' · '+(x.qta!==undefined?x.qta+' × ':'')+eur(x.pu)+' '+esc(x.um):''}${x.desc?' · '+esc(x.desc):''}${collegata?' · vendita collegata':''}${x.dipendente?`<br>Stipendio ${eur(x.stipendio??x.importo)} € · INPS ${eur(x.contributiInps??0)} € · Altri oneri ${eur(x.altriOneri??0)} €`:''}</small></div><div class="pr ${x.tipo==='e'?'up':'dn'}">${x.tipo==='e'?'+':'−'}${eur(x.importo)}</div><button class="x" style="color:var(--sea)" type="button" ${x.dipendente?`data-editpay="${x.id}"`:`data-editc="${x.id}"`}>Modifica</button><button class="x" type="button" data-delc="${x.id}">Elimina</button></div>`}).join(''):'<p class="empty">Nessuna riga. Registra la prima entrata o uscita.</p>'}`;
+ return `${azioni}${nav}<section id="conti-panel" aria-label="${schede.find(([id])=>id===view)[1]}">${{panoramica,movimenti,quantita,confronti}[view]}</section>`;
+}
+function formDipendente(){
+ const ed=S.payEdit!==null?S.c.find(x=>x.id===S.payEdit):null;
+ return `<form id="fpay"><h2 style="margin-top:0">${ed?'Modifica':'Registra'} mensilità dipendente</h2><p class="note">Stipendio, contributi INPS e altri oneri vengono sommati in un’unica uscita nella data indicata. Il mese di competenza identifica la mensilità.</p><label>Dipendente<input name="nome" value="${esc(ed?.dipendente||'')}" required></label><div class="g2"><label>Mese di competenza<input name="competenza" type="month" value="${esc(ed?.competenza||oggi().slice(0,7))}" required></label><label>Data della spesa<input name="data" type="date" value="${esc(ed?.data||oggi())}" required></label></div>
+ <label>Stipendio (€)<input name="stipendio" type="number" min="0.01" step="0.01" inputmode="decimal" value="${ed?ed.stipendio??ed.importo:''}" required></label><div class="g2"><label>Contributi INPS a carico azienda (€)<input name="contributiInps" type="number" min="0" step="0.01" inputmode="decimal" value="${ed?.contributiInps??0}"></label><label>Altri oneri (€)<input name="altriOneri" type="number" min="0" step="0.01" inputmode="decimal" value="${ed?.altriOneri??0}"></label></div>
+ <div class="balance-delta"><span>Spesa totale da registrare</span><strong id="payTotal">—</strong></div><p class="note">Inserisci solo oneri aggiuntivi allo stipendio, per evitare di contarli due volte.</p><label>Nota sugli altri oneri (facoltativa)<input name="nota" value="${esc(ed?.desc||'')}" placeholder="Es. assicurazione, visite mediche"></label><button class="btn">${ed?'Salva modifiche':'Registra nei Conti'}</button><button class="btn s" id="payCancel" type="button">Annulla</button><p class="note" id="payMsg"></p></form>`;
+}
+function stampaConti(year){
+ const w=window.open('','_blank');if(!w){const m=$('#printAccountsMsg');if(m)m.textContent=' Popup bloccato: consenti l’apertura della finestra di stampa.';return}
+ const months=['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'];
+ const calc=m=>{const key=`${year}-${String(m).padStart(2,'0')}`,en=S.c.filter(x=>x.data.slice(0,7)===key&&x.tipo==='e').reduce((s,x)=>s+Number(x.importo||0),0),us=S.c.filter(x=>x.data.slice(0,7)===key&&x.tipo==='u').reduce((s,x)=>s+Number(x.importo||0),0);return {en,us,sa:en-us}};
+ const rows=months.map((n,i)=>{const x=calc(i+1);return `<tr><td>${n}</td><td>${eur(x.en)} €</td><td>${eur(x.us)} €</td><td>${eur(x.sa)} €</td></tr>`}).join('');
+ const cats=[...new Set(S.c.filter(x=>x.data.slice(0,4)===String(year)).map(x=>x.cat))].sort((a,b)=>a.localeCompare(b,'it'));
+ const catsRows=cats.map(c=>{const es=S.c.filter(x=>x.data.slice(0,4)===String(year)&&x.cat===c&&x.tipo==='e').reduce((s,x)=>s+Number(x.importo||0),0),us=S.c.filter(x=>x.data.slice(0,4)===String(year)&&x.cat===c&&x.tipo==='u').reduce((s,x)=>s+Number(x.importo||0),0);return `<tr><td>${esc(c)}</td><td>${eur(es)} €</td><td>${eur(us)} €</td><td>${eur(es-us)} €</td></tr>`}).join('');
+ let en=0,us=0;for(let i=1;i<=12;i++){const x=calc(i);en+=x.en;us+=x.us}
+ w.document.open();w.document.write(`<!doctype html><html lang="it"><meta charset="utf-8"><title>Riepilogo conti ${year}</title><style>body{font:15px Arial,sans-serif;color:#222;max-width:900px;margin:30px auto;padding:0 24px}h1{font-size:24px}h2{font-size:18px;margin-top:28px}table{width:100%;border-collapse:collapse;margin:12px 0 24px}th,td{padding:8px;border-bottom:1px solid #ccc;text-align:right}th:first-child,td:first-child{text-align:left}.summary{font-size:17px;font-weight:bold;margin:18px 0}@media print{body{margin:0 auto;padding:0}}</style><h1>Riepilogo dei conti · ${year}</h1><p>Stampato il ${fd(oggi())}</p><p class="summary">Entrate: ${eur(en)} € &nbsp; Uscite: ${eur(us)} € &nbsp; Saldo: ${eur(en-us)} €</p><h2>Riepilogo mensile</h2><table><thead><tr><th>Mese</th><th>Entrate</th><th>Uscite</th><th>Saldo</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><th>Totale anno</th><th>${eur(en)} €</th><th>${eur(us)} €</th><th>${eur(en-us)} €</th></tr></tfoot></table><h2>Totali per categoria</h2><table><thead><tr><th>Categoria</th><th>Entrate</th><th>Uscite</th><th>Saldo</th></tr></thead><tbody>${catsRows||'<tr><td colspan="4">Nessuna registrazione</td></tr>'}</tbody></table></html>`);w.document.close();setTimeout(()=>w.print(),350);
+}
+function stampaQuantita(ya,yb){
+ const w=window.open('','_blank');if(!w){$('#printQuantitiesMsg').textContent=' Popup bloccato: consenti l’apertura della finestra di stampa.';return}
+ w.document.open();w.document.write(`<!doctype html><html lang="it"><meta charset="utf-8"><title>Confronto quantità ${ya} - ${yb}</title><style>body{font:14px Arial,sans-serif;color:#222;max-width:1000px;margin:30px auto;padding:0 24px}h1{font-size:24px}h2{font-size:19px;margin-top:25px}h3{font-size:16px;margin:18px 0 6px}.note{color:#555}.compare-wrap{overflow:visible}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:7px;border-bottom:1px solid #ccc;text-align:right}th:nth-child(-n+3),td:nth-child(-n+3){text-align:left}thead{display:table-header-group}tr{break-inside:avoid}@media print{body{margin:0 auto;padding:0}}</style><h1>Confronto delle quantità · ${ya} / ${yb}</h1><p>Stampato il ${fd(oggi())}</p>${prospettoQuantita(ya,yb)}</html>`);w.document.close();setTimeout(()=>w.print(),350)
+}
+function artDi(cat){const g=MAPP[cat];return [...new Set([...(g?CATS[g].voci:[]),...S.c.filter(x=>x.cat===cat&&x.art).map(x=>x.art)])].sort((a,b)=>a.localeCompare(b,'it'))}
+function formConto(){
+ const editing=S.editC!==null?S.c.find(x=>x.id===S.editC):null,t=editing?editing.tipo:S.ct;
+ const base=CC[t==='e'?'entrate':'uscite'],l=editing&&!base.includes(editing.cat)?[editing.cat,...base]:base;
+ return `<form id="fcn"><h2 style="margin-top:0">${editing?'Modifica':'Nuova'} ${t==='e'?'entrata':'uscita'}</h2>
+ <label for="kc">Categoria</label><select id="kc">${l.map(c=>`<option ${editing&&c===editing.cat?'selected':''}>${esc(c)}</option>`).join('')}</select>
+ <div id="kart"><label for="ka"><span id="kalabel">Articolo (facoltativo)</span></label><select id="ka"></select><input id="kaa" aria-label="Nome dell’articolo" placeholder="Scrivi il nome dell’articolo" style="display:none;margin-top:8px"></div>
+ <div id="kp" style="display:none"><div class="g2"><label id="kql"><span id="kqt">Quantità</span><input id="kq" type="number" min="0" step="any" inputmode="decimal"></label><label><span id="kzlabel">Prezzo unitario (€)</span><input id="kz" type="number" min="0" step="any" inputmode="decimal"></label></div><p class="note" id="kprezmsg"></p><label>Unità del prezzo<select id="ku"></select></label><label><input type="checkbox" id="kk" style="width:auto"> Aggiorna lo storico dei prezzi (serve un articolo)</label></div>
+ <div id="kextra" style="display:none"><div class="g2"><label>Quantità (facoltativa)<input id="kqe" type="number" min="0.01" step="any" inputmode="decimal" value="${editing?.qta??''}"></label><label>Unità di misura<input id="kue" list="kunit" placeholder="Es. kg, l, ore" value="${editing&&!String(editing.um||'').startsWith('€/')?esc(editing.um||''):''}"><datalist id="kunit"><option value="kg"><option value="l"><option value="capi"><option value="pezzi"><option value="q"><option value="t"><option value="balle"><option value="ore"><option value="giorni"><option value="mesi"></datalist></label></div><p class="note">Se indichi una quantità, inserisci anche l’unità: sarà usata nel confronto annuale.</p><p class="note" id="kextraMsg"></p></div>
+ <div id="kcapbox" style="display:none"><label><input type="checkbox" id="kcap" style="width:auto" checked> Registra anche in Vendita capi</label><div id="kcapfields"><label for="knum">Numero di capi</label><input id="knum" type="number" min="1" step="1" inputmode="numeric"><label for="kcliente">Acquirente (facoltativo)</label><input id="kcliente"><p class="note">Per la vendita a peso, inserisci sopra il peso totale in kg. L’importo è calcolato automaticamente.</p></div><p class="note" id="kcapmsg"></p></div>
+ <label for="ki">Importo (€)</label><input id="ki" type="number" step="0.01" min="0" inputmode="decimal" value="${editing?editing.importo:''}" required>
+ <label for="kd">Data</label><input id="kd" type="date" value="${editing?esc(editing.data):oggi()}" required>
+ <label for="kn">Nota (facoltativa)</label><input id="kn" value="${editing?esc(editing.desc||''):''}">
+ <button class="btn" type="submit">${editing?'Salva modifiche':'Salva'}</button><button class="btn s" type="button" id="kx">Annulla</button></form>`;
+}
+function bindConti(){
+ bindC();
+ document.querySelectorAll('[data-conti-view]').forEach(b=>b.onclick=()=>{S.contiView=b.dataset.contiView;draw()});
+ const incassi=$('#openReceivables');if(incassi)incassi.onclick=()=>{S.tab='scadenzario';draw();window.scrollTo(0,0)};
+ document.querySelectorAll('[data-check]').forEach(b=>b.onclick=()=>{
+  const [tipo,id]=b.dataset.check.split('|');
+  if(tipo==='dati'){S.tab='dati';draw();window.scrollTo(0,0);return}
+  if(tipo==='listino'){S.tab=id;draw();window.scrollTo(0,0);return}
+  if(tipo==='rimanenza'){S.contiView='quantita';S.rimEdit=Number(id);S.rimOpen=true;draw();$('#frim')?.scrollIntoView({behavior:'smooth',block:'start'});return}
+  const x=S.c.find(y=>y.id===Number(id));if(!x)return;
+  S.contiView='movimenti';if(tipo==='paga'){S.payEdit=x.id;S.pay=true}else{S.editC=x.id;S.ct=x.tipo}
+  draw();window.scrollTo(0,0)
+ });
+ const fp=$('#fpay');if(fp){$('#payCancel').onclick=()=>{S.pay=false;S.payEdit=null;draw()};
+  const importi=()=>{const stipendio=Number(fp.elements.stipendio.value),contributiInps=Number(fp.elements.contributiInps.value||0),altriOneri=Number(fp.elements.altriOneri.value||0),validi=fp.elements.stipendio.value!==''&&Number.isFinite(stipendio)&&stipendio>0&&Number.isFinite(contributiInps)&&contributiInps>=0&&Number.isFinite(altriOneri)&&altriOneri>=0;return {stipendio,contributiInps,altriOneri,validi,importo:validi?Math.round((stipendio+contributiInps+altriOneri)*100)/100:NaN}};
+  const aggiornaTotale=()=>{const v=importi();$('#payTotal').textContent=v.validi?`${eur(v.importo)} €`:'—'};['stipendio','contributiInps','altriOneri'].forEach(k=>fp.elements[k].oninput=aggiornaTotale);aggiornaTotale();
+  fp.onsubmit=e=>{e.preventDefault();const f=new FormData(fp),nome=String(f.get('nome')).trim(),competenza=String(f.get('competenza')),data=String(f.get('data')),v=importi();
+  if(!nome||!/^\d{4}-\d{2}$/.test(competenza)||!data||!v.validi){ $('#payMsg').textContent='Completa dipendente, mese, data e importi validi.';return}
+  if(S.c.some(x=>x.id!==S.payEdit&&x.dipendente?.toLocaleLowerCase('it')===nome.toLocaleLowerCase('it')&&x.competenza===competenza)){ $('#payMsg').textContent='Questa mensilità è già registrata: modifica la riga esistente nei Conti.';return}
+  const record={id:S.payEdit??Date.now(),tipo:'u',cat:'Manodopera',art:`Retribuzione ${nome}`,dipendente:nome,competenza,stipendio:v.stipendio,contributiInps:v.contributiInps,altriOneri:v.altriOneri,importo:v.importo,data,desc:String(f.get('nota')).trim(),qta:1,um:'mese'};const i=S.c.findIndex(x=>x.id===S.payEdit);if(i>=0)S.c[i]=record;else S.c.push(record);save();S.pay=false;S.payEdit=null;draw()};return}
+ const fr=$('#frim');if(fr){const anno=fr.elements.anno,prodotto=fr.elements.prodotto,iniziale=fr.elements.iniziale,finale=fr.elements.finale,altre=fr.elements.altreUscite,acquisti=fr.elements.acquisti,anteprima=$('#rimAnteprima');
+  const aggiorna=()=>{const a=Number(anno.value),p=prodotto.value,precedente=(ADV.rimanenze||[]).find(x=>x.anno===a-1&&chiaveProdotto(x.prodotto)===chiaveProdotto(p));if(precedente){iniziale.value=precedente.finale;iniziale.readOnly=true}else if(iniziale.readOnly){iniziale.value='';iniziale.readOnly=false}
+   if(!p||!anno.value||!iniziale.value||finale.value===''){anteprima.textContent=precedente?'Giacenza iniziale ripresa dalla chiusura precedente.':'Inserisci la giacenza iniziale, anche se è zero.';return}
+   const r={anno:a,prodotto:p,iniziale:precedente?null:Number(iniziale.value),finale:Number(finale.value),altreUscite:Number(altre.value||0),acquisti:Number(acquisti.value||0)},v=produzioneDaRimanenza(r);anteprima.textContent=!v.calcolabile?'I dati non quadrano: la produzione calcolata sarebbe negativa.':`Venduti registrati: ${eur(v.venduto)} kg · produzione ricostruita: ${eur(v.kg)} kg${v.incomplete?` · attenzione: ${v.incomplete} vendite senza quantità in kg`:''}.`};
+  [anno,prodotto].forEach(el=>el.onchange=()=>{iniziale.value='';iniziale.readOnly=false;aggiorna()});[iniziale,finale,altre,acquisti].forEach(el=>el.oninput=aggiorna);aggiorna();
+  fr.closest('details').ontoggle=e=>{S.rimOpen=e.target.open};
+  fr.onsubmit=e=>{e.preventDefault();const a=Number(anno.value),p=prodotto.value.trim(),precedente=(ADV.rimanenze||[]).find(x=>x.anno===a-1&&chiaveProdotto(x.prodotto)===chiaveProdotto(p));const r={id:S.rimEdit??Date.now(),anno:a,prodotto:p,iniziale:precedente?null:Number(iniziale.value),finale:Number(finale.value),altreUscite:Number(altre.value||0),acquisti:Number(acquisti.value||0)};
+   if(!Number.isSafeInteger(a)||a<2000||a>2100||!p||!iniziale.value||finale.value===''||[r.iniziale,r.finale,r.altreUscite,r.acquisti].some(n=>n!==null&&(!Number.isFinite(n)||n<0))){$('#rimMsg').textContent='Controlla anno, prodotto e quantità: tutte devono essere positive o zero.';return}
+   if((ADV.rimanenze||[]).some(x=>x.id!==S.rimEdit&&x.anno===a&&chiaveProdotto(x.prodotto)===chiaveProdotto(p))){$('#rimMsg').textContent='Esiste già una chiusura per questo prodotto e anno: modifica quella registrata.';return}
+   const v=produzioneDaRimanenza(r);if(!v.calcolabile){$('#rimMsg').textContent='La produzione calcolata è negativa. Controlla vendite e rimanenze.';return}
+   const i=ADV.rimanenze.findIndex(x=>x.id===S.rimEdit);if(i>=0)ADV.rimanenze[i]=r;else ADV.rimanenze.push(r);saveADV();S.rimEdit=null;S.rimOpen=true;draw()};
+  const cancella=$('#rimCancel');if(cancella)cancella.onclick=()=>{S.rimEdit=null;S.rimOpen=true;draw()};
+  document.querySelectorAll('[data-rimedit]').forEach(b=>b.onclick=()=>{S.rimEdit=Number(b.dataset.rimedit);S.rimOpen=true;draw();$('#frim')?.scrollIntoView({behavior:'smooth',block:'start'})});
+  document.querySelectorAll('[data-rimdel]').forEach(b=>b.onclick=()=>conf(b,()=>{ADV.rimanenze=ADV.rimanenze.filter(x=>x.id!==Number(b.dataset.rimdel));if(S.rimEdit===Number(b.dataset.rimdel))S.rimEdit=null;saveADV();S.rimOpen=true;draw()}));}
+ const vy=$('#vy');if(vy)vy.onchange=()=>{S.vy=Number(vy.value);draw()};
+ const ya=$('#ya'),yb=$('#yb');if(ya)ya.onchange=()=>{S.ya=Number(ya.value);draw()};if(yb)yb.onchange=()=>{S.yb=Number(yb.value);draw()};const cgs=$('#cg');if(cgs)cgs.onchange=()=>{S.cg=cgs.value;draw()};
+ const pr=$('#printAccounts');if(pr)pr.onclick=()=>stampaConti(Number(S.ya)||Number(oggi().slice(0,4)));
+ const pq=$('#printQuantities');if(pq)pq.onclick=()=>stampaQuantita(Number(S.ya)||Number(oggi().slice(0,4)),Number(S.yb)||Number(oggi().slice(0,4))-1);
+ const np=$('#newPay');if(np)np.onclick=()=>{S.contiView='movimenti';S.pay=true;S.payEdit=null;draw();window.scrollTo(0,0)};
+ const prod=$('#fprod');if(prod)prod.onsubmit=e=>{e.preventDefault();const f=new FormData(prod),prodotto=String(f.get('prodotto')||''),data=String(f.get('data')||''),kg=Number(f.get('kg')),raw=String(f.get('litri')||'').trim(),litri=raw===''?null:Number(raw);if(!CATS.formaggi.voci.includes(prodotto)||!dataValida(data)||!(kg>0)||litri!==null&&!(litri>0)){const msg=$('#prodMsg');if(msg)msg.textContent='Controlla prodotto, data e quantità.';return}ADV.produzione.push({id:Date.now(),data,prodotto,kg,litri});saveADV();draw()};
+ document.querySelectorAll('[data-proddel]').forEach(b=>b.onclick=()=>conf(b,()=>{ADV.produzione=ADV.produzione.filter(x=>x.id!==Number(b.dataset.proddel));saveADV();draw()}));
+ document.querySelectorAll('[data-new]').forEach(b=>b.onclick=()=>{S.contiView='movimenti';S.editC=null;S.ct=b.dataset.new;draw();window.scrollTo(0,0)});
+ document.querySelectorAll('[data-editpay]').forEach(b=>b.onclick=()=>{S.contiView='movimenti';S.payEdit=Number(b.dataset.editpay);S.pay=true;draw();window.scrollTo(0,0)});
+ document.querySelectorAll('[data-editc]').forEach(b=>b.onclick=()=>{const x=S.c.find(y=>y.id===+b.dataset.editc);if(x){S.contiView='movimenti';S.editC=x.id;S.ct=x.tipo;draw();window.scrollTo(0,0)}});
+ const f=$('#fcn');if(!f)return;
+ const ed=S.editC!==null?S.c.find(x=>x.id===S.editC):null;
+ const sale=ed?ADV.capi.find(x=>x.cid===ed.id):null;
+ const kc=$('#kc'),ka=$('#ka'),kaa=$('#kaa'),kp=$('#kp'),ku=$('#ku'),kq=$('#kq'),kz=$('#kz'),ki=$('#ki'),kk=$('#kk');
+ const kcap=$('#kcap'),kcapbox=$('#kcapbox'),kcapfields=$('#kcapfields'),knum=$('#knum'),kcliente=$('#kcliente');
+ const fillArt=sel=>{const L=artDi(kc.value);if(sel&&!L.includes(sel))L.unshift(sel);
+  ka.innerHTML='<option value="">(nessun prodotto)</option>'+L.map(a=>`<option value="${esc(a)}">${esc(a)}</option>`).join('')+'<option value="__altro">Altro prodotto…</option>';if(sel&&L.includes(sel))ka.value=sel;kaa.style.display='none';$('#kalabel').textContent=MAPP[kc.value]?'Prodotto':'Articolo (facoltativo)'};
+ const unitOpts=(g,u)=>{const us=[...new Set([...(u?[u]:[]),...CATS[g].unita])];ku.innerHTML=us.map(x=>`<option ${x===u?'selected':''}>${esc(x)}</option>`).join('')};
+ const mostra=()=>{const g=MAPP[kc.value];kp.style.display=g?'block':'none';$('#kextra').style.display=g?'none':'block';if(g)unitOpts(g,null);kcapbox.style.display=S.ct==='e'&&g==='animali'?'block':'none'};
+ let importoAutomatico=false;
+ const calcQ=()=>{const q=Number(kq.value),p=Number(kz.value),completi=kq.value!==''&&kz.value!=='';
+  if(completi&&q>=0&&p>=0){ki.value=(Math.round(q*p*100)/100).toFixed(2);importoAutomatico=true}
+  else if(importoAutomatico){ki.value='';importoAutomatico=false}};
+ const syncCapi=()=>{const active=kcapbox.style.display!=='none'&&kcap.checked,perCapo=ku.value==='€/capo';
+  kcapfields.style.display=active?'block':'none';ki.readOnly=active;kc.disabled=!!sale&&active;
+  if(sale)$('#kcapmsg').textContent=active?'Modificando questa entrata si aggiorna anche Vendita capi.':'Salvando senza il collegamento, la vendita registrata in Vendita capi sarà rimossa.';
+  $('#kql').style.display=active&&perCapo?'none':'block';$('#kqt').textContent=active?'Peso totale dei capi (kg)':kc.value==='Vendita formaggi'?'Quantità venduta':'Quantità';
+  if(active&&perCapo)kq.value=knum.value;
+  calcQ()};
+ const prezzoDi=()=>{const g=MAPP[kc.value],v=ka.value;if(!g)return;
+  if(!v||v==='__altro'){kz.value='';calcQ();return}
+  const l=ultimo(g,v);kz.value=l?l.prezzo:'';if(l)unitOpts(g,l.unita);syncCapi()};
+ kc.onchange=()=>{mostra();kcap.checked=kcapbox.style.display!=='none';fillArt('');kz.value='';kq.value='';knum.value='';syncCapi()};
+ ka.onchange=()=>{kaa.style.display=ka.value==='__altro'?'block':'none';prezzoDi()};
+ kq.oninput=calcQ;kz.oninput=calcQ;ku.onchange=()=>{if(kcap.checked&&kcapbox.style.display!=='none')kq.value=ku.value==='€/capo'?knum.value:'';syncCapi()};knum.oninput=syncCapi;kcap.onchange=syncCapi;ki.oninput=()=>{importoAutomatico=false};
+ mostra();fillArt(ed?ed.art||'':'');
+ if(ed&&ed.pu&&MAPP[ed.cat]){kz.value=ed.pu;unitOpts(MAPP[ed.cat],ed.um);if(ed.qta)kq.value=ed.qta}
+ if(sale){unitOpts('animali',MODU[sale.mod]);kz.value=sale.prezzo;kq.value=sale.mod==='capo'?sale.n:sale.peso;knum.value=sale.n;kcliente.value=sale.cliente||''}
+ if(ed?.pid||sale?.pid)kk.checked=true;
+ syncCapi();
+ $('#kx').onclick=()=>{S.ct=false;S.editC=null;draw()};
+ f.onsubmit=ev=>{ev.preventDefault();
+  const d=$('#kd').value,nt=$('#kn').value.trim(),g=MAPP[kc.value];
+  let art=ka.value==='__altro'?kaa.value.trim():ka.value;
+  const pz=g?parseFloat(kz.value):NaN,qt=g?parseFloat(kq.value):NaN,qextra=$('#kqe').value.trim(),uextra=$('#kue').value.trim();
+  const linkCapi=S.ct==='e'&&g==='animali'&&kcap.checked;
+  const mode=Object.keys(MODU).find(k=>MODU[k]===ku.value),n=Number(knum.value);
+  if(linkCapi&&(!art||!mode||!Number.isInteger(n)||n<1||!Number.isFinite(pz)||pz<0||(mode!=='capo'&&!(qt>0)))){$('#kcapmsg').textContent='Per Vendita capi inserisci articolo, numero di capi, peso se vendi al kg e prezzo unitario.';return}
+  if(S.ct==='e'&&kc.value==='Vendita formaggi'&&(!art||!(qt>0)||!Number.isFinite(pz)||pz<0)){$('#kprezmsg').textContent='Seleziona il prodotto e inserisci quantità e prezzo validi.';return}
+  if(!g&&(qextra&&!Number.isFinite(Number(qextra))||qextra&&!(Number(qextra)>0)||qextra&&!uextra||!qextra&&uextra)){$('#kextraMsg').textContent='Per confrontare le quantità, inserisci un valore maggiore di zero e la relativa unità di misura.';return}
+  const im=linkCapi?Math.round((mode==='capo'?n:qt)*pz*100)/100:parseFloat(ki.value);
+  if(!Number.isFinite(im)||im<0)return;
+  const record={id:S.editC??Date.now(),tipo:S.ct,cat:kc.value,importo:im,data:d,desc:nt,art};
+  if(!g&&qextra){record.qta=Number(qextra);record.um=uextra}
+  if(ed?.pid||sale?.pid)record.pid=ed?.pid||sale.pid;
+  if(!isNaN(pz)){record.pu=pz;record.um=ku.value;if(!isNaN(qt))record.qta=qt}
+  let linkedSale=sale;
+  if(linkCapi){if(!CATS.animali.voci.includes(art)){CATS.animali.voci.push(art);saveV()}
+   if(!linkedSale){linkedSale={id:Date.now()+3};ADV.capi.push(linkedSale)}
+   Object.assign(linkedSale,{cid:record.id,data:d,voce:art,n,mod:mode,peso:mode==='capo'?0:qt,prezzo:pz,totale:im,cliente:kcliente.value.trim()});record.capid=linkedSale.id}
+  else if(sale){ADV.capi=ADV.capi.filter(x=>x!==sale);if(sale.pid&&!kk.checked){rimuoviPrezzoCollegato(sale.pid,record.id,[sale.id]);delete record.pid}}
+  if(S.editC!==null){const i=S.c.findIndex(x=>x.id===S.editC);if(i>=0)S.c[i]=record;else S.c.push(record)}else S.c.push(record);
+  if(g&&kk.checked&&art&&!isNaN(pz)){if(!CATS[g].voci.includes(art)){CATS[g].voci.push(art);saveV()}
+   let prezzo=S.e.find(x=>x.id===record.pid);if(!prezzo){prezzo={id:Date.now()+1};S.e.push(prezzo);record.pid=prezzo.id}
+   Object.assign(prezzo,{cat:g,voce:art,prezzo:pz,unita:ku.value,data:d,nota:nt})}
+  else if(record.pid){rimuoviPrezzoCollegato(record.pid,record.id,sale?[sale.id]:[]);delete record.pid}
+  if(linkCapi){if(kk.checked&&record.pid)linkedSale.pid=record.pid;else if(linkedSale.pid){rimuoviPrezzoCollegato(linkedSale.pid,record.id,[linkedSale.id]);delete linkedSale.pid;delete record.pid}}
+  saveADV();save();S.ct=false;S.editC=null;draw()};
+}
+let P={az:undefined,cli:'',tel:'',iva:'',val:'',nota:'',righe:[]};
+const num=v=>{let s=String(v??'').trim().replace(/[\s€]/g,'');if(!s)return NaN;if(s.includes(',')&&s.includes('.'))s=s.replace(/\./g,'').replace(',','.');else s=s.replace(',','.');return /^[-+]?(?:\d+\.?\d*|\.\d+)$/.test(s)?Number(s):NaN};
+function saveP(){persist('pa_quote',P)}
+function loadP(){try{const q=JSON.parse(readStored('pa_quote')||'null');if(q&&Array.isArray(q.righe)){P={az:typeof q.az==='string'?q.az:'',cli:typeof q.cli==='string'?q.cli:'',tel:typeof q.tel==='string'?q.tel:'',iva:q.iva||'',val:q.val||'',nota:typeof q.nota==='string'?q.nota:'',righe:q.righe.filter(r=>r&&typeof r==='object').map(r=>({d:String(r.d||''),q:String(r.q||''),u:String(r.u||''),p:String(r.p||'')}))}}}catch(x){}}
+function prev(){
+ if(P.az===undefined)P.az=readStored('pa_az')||'';
+ const cat=['animali','formaggi'].map(c=>`<optgroup label="${CATS[c].t}">${CATS[c].voci.map(v=>`<option value="${c}|${esc(v)}">${esc(v)}</option>`).join('')}</optgroup>`).join('');
+ return `<h2>Preventivo</h2><div class="card">
+ <label>La tua azienda<input id="pa" value="${esc(P.az)}"></label>
+ <label>Cliente<input id="pc" value="${esc(P.cli)}"></label>
+ <label>Telefono WhatsApp del cliente (facoltativo)<input id="pt" type="tel" inputmode="tel" value="${esc(P.tel)}"></label>
+ <div class="note">Se scrivi il numero senza prefisso, aggiungo +39.</div></div>
+ <h2>Voci</h2>${P.righe.map((r,i)=>`<div class="card"><label>Descrizione<input data-r="${i}" data-f="d" value="${esc(r.d)}"></label>
+ <div class="g2"><label>Quantità<input data-r="${i}" data-f="q" inputmode="decimal" value="${esc(r.q)}"></label><label>Unità<input data-r="${i}" data-f="u" value="${esc(r.u)}"></label></div>
+ <label>Prezzo per unità (€)<input data-r="${i}" data-f="p" inputmode="decimal" value="${esc(r.p)}"></label>
+ <button class="x" type="button" data-rm="${i}">Togli voce</button></div>`).join('')}
+ <select id="pl" aria-label="Aggiungi una voce"><option value="">+ Aggiungi una voce…</option>${cat}</select>
+ <button class="btn s" id="pf" type="button" style="margin:8px 0 0">+ Voce libera</button>
+ <div class="card" style="margin-top:14px"><div class="g2"><label>IVA % (facoltativa)<input id="pi" inputmode="decimal" value="${esc(P.iva)}"></label><label>Validità (giorni)<input id="pv" inputmode="numeric" value="${esc(P.val)}"></label></div>
+ <label>Note<textarea id="pn" rows="2">${esc(P.nota)}</textarea></label></div>
+ <h2>Messaggio</h2><div class="card"><textarea id="ptx" rows="9" readonly aria-label="Anteprima del messaggio"></textarea>
+ <a class="btn" id="wa" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="#">Invia su WhatsApp</a>
+ <button class="btn s" id="pdfq" type="button">Stampa / salva PDF</button>
+ <button class="btn s" id="pcp" type="button">Copia testo</button><button class="btn s" id="pnw" type="button">Nuovo</button>
+ <div class="note" id="pm">Aggiungi almeno una voce con quantità e prezzo.</div></div>`;
+}
+function leggiP(){
+ if(!$('#pc'))return;
+ P.az=$('#pa').value;
+ P.cli=$('#pc').value;P.tel=$('#pt').value;P.iva=$('#pi').value;P.val=$('#pv').value;P.nota=$('#pn').value;
+ document.querySelectorAll('[data-r]').forEach(el=>{const r=P.righe[+el.dataset.r];if(r)r[el.dataset.f]=el.value});saveP();
+}
+function testoP(){
+ let tot=0;
+ const L=P.righe.filter(r=>r.d&&num(r.q)>0&&num(r.p)>=0).map(r=>{const q=num(r.q),p=num(r.p),s=q*p;tot+=s;return `• ${r.d}: ${q.toLocaleString('it-IT',{maximumFractionDigits:3})} ${r.u||''} × ${eur(p)} € = ${eur(s)} €`});
+ if(!L.length)return '';
+ const o=[`*Preventivo*${P.az?' – '+P.az:''}`,P.cli?`Per: ${P.cli}`:'',`Data: ${fd(oggi())}`,'',...L,''];
+ const iv=num(P.iva);
+ if(iv>0){const im=tot*iv/100;o.push(`Imponibile: ${eur(tot)} €`,`IVA ${String(iv).replace('.',',')}%: ${eur(im)} €`,`*Totale: ${eur(tot+im)} €*`)}else o.push(`*Totale: ${eur(tot)} €*`);
+ if(num(P.val)>0)o.push('',`Valido per ${num(P.val)} giorni.`);
+ if(P.nota.trim())o.push('',P.nota.trim());
+ return o.filter((x,i,a)=>!(x===''&&a[i-1]==='')).join('\n').trim();
+}
+function aggiornaP(){
+ if(!$('#ptx'))return;
+ const t=testoP();$('#ptx').value=t;
+ let n=P.tel.trim().replace(/[^\d+]/g,'');
+ if(n.startsWith('+'))n=n.slice(1);else if(n.startsWith('00'))n=n.slice(2);else if(n)n='39'+n;
+ n=n.replace(/\D/g,'');const numeroValido=/^[1-9]\d{7,14}$/.test(n);
+ $('#wa').href=t&&numeroValido?`https://wa.me/${n}?text=${encodeURIComponent(t)}`:'#';
+ $('#wa').style.opacity=t&&numeroValido?1:.5;$('#wa').setAttribute('aria-disabled',String(!(t&&numeroValido)));$('#wa').title=t&&!numeroValido?'Inserisci un numero completo con prefisso per inviare su WhatsApp':'';
+ $('#pm').textContent=t?'Controlla il testo, poi tocca Invia su WhatsApp.':'Aggiungi almeno una voce con quantità e prezzo.';
+}
+function stampaPreventivo(){
+ leggiP();const righe=P.righe.filter(r=>r.d&&num(r.q)>0&&num(r.p)>=0);if(!righe.length){$('#pm').textContent='Completa almeno una voce con quantità e prezzo prima di stampare.';return}
+ const w=window.open('','_blank');if(!w){$('#pm').textContent='Il browser ha bloccato la finestra di stampa. Consenti i popup per questa app e riprova.';return}
+ const totale=righe.reduce((s,r)=>s+num(r.q)*num(r.p),0),iva=num(P.iva)>0?totale*num(P.iva)/100:0;
+ const rows=righe.map(r=>`<tr><td>${esc(r.d)}</td><td>${num(r.q).toLocaleString('it-IT',{maximumFractionDigits:3})} ${esc(r.u||'')}</td><td>${eur(num(r.p))} €</td><td>${eur(num(r.q)*num(r.p))} €</td></tr>`).join('');
+ w.document.open();w.document.write(`<!doctype html><html lang="it"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Preventivo${P.cli?' - '+esc(P.cli):''}</title><style>body{font:16px Arial,sans-serif;color:#222;max-width:800px;margin:36px auto;padding:0 24px}h1{font-size:26px;margin-bottom:4px}.meta{color:#555;margin:4px 0 24px}table{width:100%;border-collapse:collapse;margin:20px 0}th,td{padding:10px 8px;border-bottom:1px solid #ccc;text-align:left}th:nth-child(n+2),td:nth-child(n+2){text-align:right}.tot{margin-left:auto;width:260px}.tot div{display:flex;justify-content:space-between;padding:5px 0}.grand{font-size:20px;font-weight:bold;border-top:2px solid #222;margin-top:6px;padding-top:10px!important}.note{white-space:pre-wrap;margin-top:24px}.actions{margin-top:24px}@media print{body{margin:0 auto;padding:0}.actions{display:none}}</style><h1>Preventivo</h1><div class="meta"><strong>${esc(P.az||'')}</strong>${P.cli?`<br>Cliente: ${esc(P.cli)}`:''}${P.tel?`<br>Telefono: ${esc(P.tel)}`:''}<br>Data: ${fd(oggi())}${num(P.val)>0?` · Valido ${num(P.val)} giorni`:''}</div><table><thead><tr><th>Descrizione</th><th>Quantità</th><th>Prezzo unitario</th><th>Totale</th></tr></thead><tbody>${rows}</tbody></table><div class="tot"><div><span>Imponibile</span><span>${eur(totale)} €</span></div>${iva?`<div><span>IVA ${num(P.iva).toLocaleString('it-IT')}%</span><span>${eur(iva)} €</span></div>`:''}<div class="grand"><span>Totale</span><span>${eur(totale+iva)} €</span></div></div>${P.nota.trim()?`<div class="note"><strong>Note</strong><br>${esc(P.nota.trim())}</div>`:''}<div class="actions"><button onclick="window.print()">Stampa / salva PDF</button></div><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250))<\/script></html>`);
+ w.document.close();
+}
+function bindPrev(){
+ $('#main').oninput=()=>{leggiP();aggiornaP()};
+ $('#pl').onchange=e=>{const v=e.target.value;if(!v)return;leggiP();const [c,n]=v.split('|'),u=ultimo(c,n);
+  P.righe.push({d:n,q:'',u:u?u.unita.replace('€/',''):'',p:u?String(u.prezzo).replace('.',','):''});saveP();draw()};
+ $('#pf').onclick=()=>{leggiP();P.righe.push({d:'',q:'',u:'',p:''});saveP();draw()};
+ document.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{leggiP();P.righe.splice(+b.dataset.rm,1);saveP();draw()});
+ $('#pnw').onclick=e=>conf(e.currentTarget,()=>{P={az:P.az,cli:'',tel:'',iva:'',val:'',nota:'',righe:[]};saveP();draw()});
+ $('#pdfq').onclick=stampaPreventivo;
+ $('#pcp').onclick=()=>{const t=$('#ptx').value;if(!t)return;
+  const ok=()=>{$('#pm').textContent='Testo copiato.'};
+  try{navigator.clipboard.writeText(t).then(ok,()=>{$('#ptx').select();$('#pm').textContent='Seleziona e copia il testo qui sopra.'})}catch(x){$('#ptx').select();$('#pm').textContent='Seleziona e copia il testo qui sopra.'}};
+ aggiornaP();
+}
+function kget(){return {entrate:CC.entrate,uscite:CC.uscite,map:MAPP}}
+function saveCC(){persist('pa_cc',kget())}
+function setK(o){if(!o||!Array.isArray(o.entrate)||!Array.isArray(o.uscite))return;CC.entrate=o.entrate;CC.uscite=o.uscite;Object.keys(MAPP).forEach(k=>delete MAPP[k]);Object.assign(MAPP,o.map||{});saveCC()}
+function loadCC(){try{setK(JSON.parse(readStored('pa_cc')||'null'))}catch(x){}}
+function gestC(){
+ const riga=(t,v,i)=>S.gci&&S.gci[0]===t&&S.gci[1]===i
+  ?`<div class="row" style="padding:8px 12px;display:flex;gap:8px;align-items:center"><input id="eci" aria-label="Nome della categoria" value="${esc(v)}" style="flex:1"><button class="x" style="color:var(--sea)" type="button" data-sc="${t}|${i}">Salva</button><button class="x" type="button" data-xc>Annulla</button></div>`
+  :`<div class="row" style="padding:8px 12px;display:flex;gap:8px;align-items:center"><div class="nm">${esc(v)}</div><button class="x" style="color:var(--sea)" type="button" data-ec="${t}|${i}">Modifica</button><button class="x" type="button" data-dc="${t}|${i}">Elimina</button></div>`;
+ const sez=(t,tit)=>`<h2>${tit}</h2><div class="card">${CC[t].map((v,i)=>riga(t,v,i)).join('')}<label>Nuova categoria<input data-nc="${t}"></label><button class="btn s" type="button" data-ac="${t}" style="margin:8px 0 0">Aggiungi</button></div>`;
+ return sez('entrate','Categorie delle entrate')+sez('uscite','Categorie delle uscite')+`<button class="btn" id="cc" type="button">Chiudi</button><div class="note" id="cm">Se elimini una categoria, le righe già registrate restano con il loro nome. Se la rinomini, le righe seguono il nuovo nome.</div>`;
+}
+function bindC(){
+ const g=document.querySelector('[data-gc]');if(g)g.onclick=()=>{S.gc=true;S.gci=null;draw()};
+ if(!S.gc)return;
+ const msg=t=>{$('#cm').textContent=t},dup=(t,n,i)=>CC[t].some((x,j)=>j!==i&&x.toLowerCase()===n.toLowerCase());
+ $('#cc').onclick=()=>{S.gc=false;S.gci=null;draw()};
+ document.querySelectorAll('[data-ac]').forEach(b=>b.onclick=()=>{const t=b.dataset.ac,n=document.querySelector(`[data-nc="${t}"]`).value.trim();
+  if(!n)return msg('Scrivi il nome della categoria.');
+  if(dup(t,n,-1))return msg('Questa categoria esiste già.');
+  CC[t].push(n);saveCC();draw()});
+ document.querySelectorAll('[data-ec]').forEach(b=>b.onclick=()=>{const p=b.dataset.ec.split('|');S.gci=[p[0],+p[1]];draw()});
+ document.querySelectorAll('[data-xc]').forEach(b=>b.onclick=()=>{S.gci=null;draw()});
+ document.querySelectorAll('[data-sc]').forEach(b=>b.onclick=()=>{
+  const p=b.dataset.sc.split('|'),t=p[0],i=+p[1],v=CC[t][i],n=$('#eci').value.trim();
+  if(!n)return msg('Scrivi il nome della categoria.');
+  if(dup(t,n,i))return msg('Questa categoria esiste già.');
+  CC[t][i]=n;S.c.forEach(x=>{if(x.tipo===(t==='entrate'?'e':'u')&&x.cat===v)x.cat=n});
+  if(MAPP[v]!==undefined){MAPP[n]=MAPP[v];delete MAPP[v]}
+  S.gci=null;saveCC();save();draw()});
+ document.querySelectorAll('[data-dc]').forEach(b=>b.onclick=()=>conf(b,()=>{
+  const p=b.dataset.dc.split('|');CC[p[0]].splice(+p[1],1);saveCC();draw()}));
+ const ei=$('#eci');if(ei)ei.focus();
+}
+function histRow(x,cat,n){
+ const k=esc(cat+'|'+n);
+ const vendita=ADV.capi.find(v=>v.pid===x.id);
+ if(vendita)return `<tr><td>${fd(x.data)}${x.nota?'<br><small class="note">'+esc(x.nota)+'</small>':''}</td><td>${eur(x.prezzo)} ${esc(x.unita)}</td><td><button class="x" style="color:var(--sea)" type="button" data-open-cap="${vendita.id}">Apri vendita</button></td></tr>`;
+ if(S.ep===x.id){
+  const us=[...new Set([x.unita,...CATS[cat].unita])];
+  return `<tr><td colspan="3"><label>Prezzo (€)<input id="ep" inputmode="decimal" value="${String(x.prezzo).replace('.',',')}"></label><div class="g2"><label>Unità<select id="eu">${us.map(u=>`<option ${u===x.unita?'selected':''}>${esc(u)}</option>`).join('')}</select></label><label>Data<input id="ed" type="date" value="${x.data}"></label></div><label>Nota<input id="en" value="${esc(x.nota||'')}"></label><button class="btn" type="button" data-sp="${x.id}" data-k="${k}">Salva</button><button class="btn s" type="button" data-xp data-k="${k}">Annulla</button><div class="note" id="pmm"></div></td></tr>`;
+ }
+ return `<tr><td>${fd(x.data)}${x.nota?'<br><small class="note">'+esc(x.nota)+'</small>':''}</td><td>${eur(x.prezzo)} ${esc(x.unita)}</td><td><button class="x" style="color:var(--sea)" type="button" data-mp="${x.id}" data-k="${k}">Modifica</button><button class="x" type="button" data-del="${x.id}" data-k="${k}" aria-label="Elimina">Elimina</button></td></tr>`;
+}
+function vPrezzo(cat,v){const l=ultimo(cat,v);return l?`${eur(l.prezzo)} ${esc(l.unita)}`:'nessun prezzo'}
+function vEdit(cat,v,i){
+ const C=CATS[cat],l=ultimo(cat,v),us=[...new Set([...(l?[l.unita]:[]),...C.unita])];
+ return `<div class="row" style="padding:10px 12px"><label>Nome<input id="ei" value="${esc(v)}"></label><div class="g2"><label>Prezzo (€)<input id="epv" inputmode="decimal" value="${l?String(l.prezzo).replace('.',','):''}"></label><label>Unità<select id="euv">${us.map(u=>`<option ${l&&u===l.unita?'selected':''}>${esc(u)}</option>`).join('')}</select></label></div><button class="btn" type="button" data-sv="${i}">Salva</button><button class="btn s" type="button" data-xv>Annulla</button></div>`;
+}
+function conf(b,fn,messaggio='Tocca per confermare'){
+ if(b.dataset.c){fn();return}
+ const t=b.textContent;b.dataset.c=1;b.textContent=messaggio;
+ setTimeout(()=>{if(b.isConnected){delete b.dataset.c;b.textContent=t}},3000);
+}
+function prezzoCollegatoSoloQui(pid,contoId,capiIds=[]){
+ return Number.isSafeInteger(pid)&&S.e.some(x=>x.id===pid)&&!S.c.some(x=>x.id!==contoId&&x.pid===pid)&&!ADV.capi.some(x=>!capiIds.includes(x.id)&&x.pid===pid)
+}
+function rimuoviPrezzoCollegato(pid,contoId,capiIds=[]){if(prezzoCollegatoSoloQui(pid,contoId,capiIds))S.e=S.e.filter(x=>x.id!==pid)}
+function vget(){return {animali:CATS.animali.voci,formaggi:CATS.formaggi.voci,mangimi:CATS.mangimi.voci}}
+function saveV(){persist('pa_v',vget())}
+function setV(o){if(!o)return;Object.keys(CATS).forEach(k=>{if(Array.isArray(o[k])&&o[k].every(s=>typeof s==='string'))CATS[k].voci=o[k]});saveV()}
+function loadV(){try{setV(JSON.parse(readStored('pa_v')||'null'))}catch(x){}}
+function gestV(cat){
+ const C=CATS[cat];
+ return `<div class="card"><h2 style="margin-top:0">Voci: ${C.t}</h2>${C.voci.map((v,i)=>S.gvi===i?`${vEdit(cat,v,i)}`:`<div class="row" style="padding:8px 12px;display:flex;gap:8px;align-items:center"><div class="nm">${esc(v)}<small>${vPrezzo(cat,v)}</small></div><button class="x" style="color:var(--sea)" type="button" data-ev="${i}">Modifica</button><button class="x" type="button" data-dv="${i}">Elimina</button></div>`).join('')}
+ <label>Nuova voce<input id="nv"></label><div class="g2"><label>Prezzo (€, facoltativo)<input id="np" inputmode="decimal"></label><label>Unità<select id="nu">${C.unita.map(u=>`<option>${esc(u)}</option>`).join('')}</select></label></div><button class="btn" id="av" type="button">Aggiungi voce</button><button class="btn s" id="cv" type="button">Chiudi</button>
+ <div class="note" id="vm">Eliminando una voce si cancellano anche i suoi prezzi registrati. Rinominandola, i prezzi seguono il nuovo nome.</div></div>`;
+}
+function bindV(cat){
+ document.querySelectorAll('[data-ap]').forEach(b=>b.onclick=()=>{S.pre={cat,voce:b.dataset.ap};S.open=true;draw();window.scrollTo(0,0)});
+ document.querySelectorAll('[data-mp]').forEach(b=>b.onclick=()=>{S.ep=+b.dataset.mp;S.od=b.dataset.k;draw()});
+ document.querySelectorAll('[data-xp]').forEach(b=>b.onclick=()=>{S.ep=null;S.od=b.dataset.k;draw()});
+ document.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{
+  const p=num($('#ep').value),x=S.e.find(y=>y.id===+b.dataset.sp);
+  if(!x)return;
+  if(isNaN(p)||p<0){$('#pmm').textContent='Scrivi un prezzo valido.';return}
+  x.prezzo=p;x.unita=$('#eu').value;x.data=$('#ed').value||x.data;x.nota=$('#en').value.trim();
+  S.ep=null;S.od=b.dataset.k;save();draw()});
+ const g=document.querySelector('[data-gv]');if(g)g.onclick=()=>{S.gv=cat;S.gvi=null;draw()};
+ if(S.gv!==cat)return;
+ const L=CATS[cat].voci,dup=(n,i)=>L.some((x,j)=>j!==i&&x.toLowerCase()===n.toLowerCase());
+ $('#cv').onclick=()=>{S.gv=false;S.gvi=null;draw()};
+ $('#av').onclick=()=>{const n=$('#nv').value.trim();
+  if(!n){$('#vm').textContent='Scrivi il nome della voce.';return}
+  if(dup(n,-1)){$('#vm').textContent='Questa voce esiste già.';return}
+  const pv=$('#np').value.trim();let p=null;
+  if(pv!==''){p=num(pv);if(isNaN(p)||p<0){$('#vm').textContent='Scrivi un prezzo valido.';return}}
+  L.push(n);if(p!==null)S.e.push({id:Date.now(),cat,voce:n,prezzo:p,unita:$('#nu').value,data:oggi(),nota:''});
+  saveV();save();draw()};
+ document.querySelectorAll('[data-ev]').forEach(b=>b.onclick=()=>{S.gvi=+b.dataset.ev;draw()});
+ document.querySelectorAll('[data-xv]').forEach(b=>b.onclick=()=>{S.gvi=null;draw()});
+ document.querySelectorAll('[data-sv]').forEach(b=>b.onclick=()=>{
+  const i=+b.dataset.sv,v=L[i],n=$('#ei').value.trim();
+  if(!n){$('#vm').textContent='Scrivi il nome della voce.';return}
+  if(dup(n,i)){$('#vm').textContent='Questa voce esiste già.';return}
+  const pv=$('#epv').value.trim();let p=null;
+  if(pv!==''){p=num(pv);if(isNaN(p)||p<0){$('#vm').textContent='Scrivi un prezzo valido.';return}}
+  L[i]=n;S.e.forEach(x=>{if(x.cat===cat&&x.voce===v)x.voce=n});
+  if(p!==null){const l=ultimo(cat,n);if(l){l.prezzo=p;l.unita=$('#euv').value}else S.e.push({id:Date.now(),cat,voce:n,prezzo:p,unita:$('#euv').value,data:oggi(),nota:''})}
+  S.gvi=null;saveV();save();draw()});
+ document.querySelectorAll('[data-dv]').forEach(b=>b.onclick=()=>conf(b,()=>{
+  const i=+b.dataset.dv,v=L[i];L.splice(i,1);S.e=S.e.filter(x=>!(x.cat===cat&&x.voce===v));saveV();save();draw()}));
+ const ei=$('#ei');if(ei)ei.focus();
+}
+function origineApp(){if(location.protocol!=='file:')return location.href.split('#')[0];try{return decodeURIComponent(location.pathname).replace(/^\/([A-Za-z]:)/,'$1')}catch(x){return location.pathname}}
+function backupPayload(){return {meta:{versione:APP_VERSION,creato:new Date().toISOString(),origine:origineApp()},e:S.e,c:S.c,v:vget(),k:kget(),p:P,a:ADV}}
+function dataUltimaCopia(){try{const d=JSON.parse(readStored('pa_last_backup')||'null');return typeof d==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d)?fd(d):'Mai scaricata'}catch(x){return 'Mai scaricata'}}
+function anteprimaBackup(a){
+ if(Array.isArray(a))return `<strong>Vecchia copia del solo listino</strong><p class="note">${a.length} prezzi. Il ripristino sostituirà soltanto i prezzi; gli altri dati resteranno nell’archivio attuale.</p>`;
+ if(!a||!Array.isArray(a.e)||!Array.isArray(a.c))throw Error('Copia non riconosciuta');
+ const entrate=a.c.filter(x=>x?.tipo==='e').length,uscite=a.c.filter(x=>x?.tipo==='u').length,meta=a.meta||{},data=meta.creato&&Number.isFinite(Date.parse(meta.creato))?new Date(meta.creato).toLocaleString('it-IT'):'Non indicata';
+ return `<strong>Contenuto della copia da ripristinare</strong><p>Prezzi: ${a.e.length} · Entrate: ${entrate} · Uscite: ${uscite} · Scadenze: ${Array.isArray(a.a?.scadenze)?a.a.scadenze.length:0} · Rimanenze annuali: ${Array.isArray(a.a?.rimanenze)?a.a.rimanenze.length:0}</p><p class="note">Creata: ${esc(data)} · Versione: ${esc(meta.versione||'non indicata')}</p><p class="note" style="overflow-wrap:anywhere">Origine: ${esc(meta.origine||'non indicata')}</p><p class="note"><strong>Attenzione:</strong> il ripristino sostituirà i dati attualmente registrati in questa copia dell’app.</p>`;
+}
+function dati(){
+ const entrate=S.c.filter(x=>x.tipo==='e').length,uscite=S.c.filter(x=>x.tipo==='u').length;
+ return `<h2>Dati e copia di sicurezza</h2><div class="card"><p class="note">I dati sono in IndexedDB in questo browser e su questo dispositivo. GitHub Pages pubblica l’app, non sincronizza le registrazioni. Usa una copia JSON per passare da un’altra copia HTML, dal file locale al sito o a un altro dispositivo.</p><p class="note">Al primo avvio, questa versione importa i dati precedenti trovati nello stesso indirizzo del browser. Da quel momento usa questa versione: le vecchie copie HTML continuano ad avere un archivio separato.</p><p><strong>Versione ${APP_VERSION}</strong><br><small class="note" style="overflow-wrap:anywhere">Indirizzo aperto: ${esc(origineApp())}</small></p><p>Archivio attuale: <strong>${S.e.length}</strong> prezzi · <strong>${entrate}</strong> entrate · <strong>${uscite}</strong> uscite · <strong>${ADV.scadenze.length}</strong> scadenze · <strong>${(ADV.rimanenze||[]).length}</strong> rimanenze annuali</p><p class="note">Ultima copia scaricata: <strong id="lastBackup">${dataUltimaCopia()}</strong>${copiaDaFare()?' · È il momento di scaricarne una nuova.':''}</p><button class="btn" id="dwn" type="button">Scarica copia di sicurezza</button><button class="btn s" id="cpbk" type="button">Copia testo</button><details class="lk" id="rawBackup" style="margin-top:12px"><summary>Mostra il testo completo della copia</summary><textarea id="bk" rows="5" readonly aria-label="Dati della copia di sicurezza">${esc(JSON.stringify(backupPayload()))}</textarea></details><p class="note" id="rm"></p></div>
+ <div class="card"><h2 style="margin-top:0">Ripristina o trasferisci una copia</h2><p class="note">Per trasferire i dati al futuro sito GitHub Pages: scarica qui la copia JSON, apri il sito e seleziona il file qui sotto. Controlla l’anteprima prima di confermare: il ripristino sostituisce l’archivio aperto.</p><label for="backupFile">Seleziona una copia JSON</label><input id="backupFile" type="file" accept=".json,application/json"><label for="im">Oppure incolla il testo della copia</label><textarea id="im" rows="5"></textarea><button class="btn s" id="previewBackup" type="button">Mostra anteprima</button><div id="previewResult" class="note" role="status"></div><button class="btn" id="ri" type="button" disabled>Conferma ripristino</button></div>`;
+}
+function copiaDaFare(){try{const d=JSON.parse(readStored('pa_last_backup')||'null');return !d||!Number.isFinite(Date.parse(d))||(Date.now()-Date.parse(d))/86400000>=30}catch(x){return true}}
+function agevolazioni(){
+ const gruppi=[
+  ['Gargano e bandi aperti',[
+   ['GAL Gargano: bandi e avvisi','https://www.galgargano.com/bandi-gal/','Opportunità per i comuni dell’area GAL. Controlla per ogni avviso se sono ammesse attività agricole, casearie o solo extra-agricole.'],
+   ['CSR Puglia: bandi e avvisi','https://csr.regione.puglia.it/bandi','Elenco regionale con stato del bando, scadenze e documenti ufficiali.']]],
+  ['Allevamento e caseificio',[
+   ['SRD01: investimenti nelle aziende agricole','https://csr.regione.puglia.it/web/guest/srd01-investimenti-produttivi-agricoli-per-la-competitivit%C3%A0-delle-aziende','Investimenti produttivi, innovazione e miglioramenti dell’azienda agricola. Apri i bandi collegati per conoscere requisiti e termini.'],
+   ['SRD13: trasformazione e commercializzazione','https://csr.regione.puglia.it/web/guest/investimenti-per-la-trasformazione-e-commercializzazione-dei-prodotti-agricoli','Intervento da consultare per lavorazione, conservazione, confezionamento e vendita dei prodotti del caseificio. Verifica i bandi collegati.']]],
+  ['Giovani e nuove imprese',[
+   ['SRE01: insediamento giovani agricoltori','https://csr.regione.puglia.it/web/guest/sre01-insediamento-giovani-agricoltori','Primo insediamento in agricoltura: controlla i bandi collegati per termini e requisiti.'],
+   ['ISMEA Più Impresa','https://www.ismea.it/flex/cm/pages/ServeBLOB.php/L/IT/IDPagina/13521','Agevolazioni nazionali per giovani e donne che subentrano o ampliano un’impresa agricola.'],
+   ['ISMEA Generazione Terra','https://www.ismea.it/Startup/GenerazioneTerra','Acquisto di terreni agricoli da parte di giovani: consulta la pagina per eventuali nuove aperture.']]],
+  ['Ricerca e assistenza a Foggia',[
+   ['Camera di Commercio: Portale Agevolazioni','https://www.fg.camcom.it/servizi/portale-agevolazioni','Servizio gratuito: descrivi l’investimento e richiedi un elenco personalizzato dei bandi pertinenti.'],
+   ['Camera di Commercio: bandi per le imprese','https://www.fg.camcom.it/bandi-contributi/bandi-sostegno-imprese','Bandi locali per digitale, sostenibilità, export e altre attività: verifica l’ammissibilità dell’impresa agricola.'],
+   ['Sportello Puglia Sviluppo a Foggia','https://www.fg.camcom.it/servizi/sportello-camera-di-commercio-puglia-sviluppo','Orientamento gratuito sulle misure regionali e sulla fattibilità del progetto.'],
+   ['Incentivi.gov.it','https://www.incentivi.gov.it/it','Catalogo nazionale: cerca per attività, territorio e tipo di investimento; verifica sempre i requisiti del singolo incentivo.']]]
+ ];
+ return `<h2>Agevolazioni per stalla e caseificio</h2><p class="note">Collegamenti istituzionali utili per un’impresa nel Gargano. Bandi, requisiti e scadenze possono cambiare: controlla sempre la pagina ufficiale prima di preparare una domanda.</p>${gruppi.map(([titolo,links])=>`<h2>${titolo}</h2><div class="card src">${links.map(([nome,url,descrizione])=>`<a href="${url}" target="_blank" rel="noopener">${nome}</a><p>${descrizione}</p>`).join('')}</div>`).join('')}`;
+}
+let ADV={latte:[],lotti:[],vendite:[],capi:[],scadenze:[],produzione:[],rimanenze:[]};
+function loadADV(){try{const a=JSON.parse(readStored('pa_adv')||'null');if(a&&Array.isArray(a.latte)&&Array.isArray(a.lotti)&&Array.isArray(a.vendite)){ADV=a;ADV.capi=Array.isArray(a.capi)?a.capi:[];ADV.scadenze=Array.isArray(a.scadenze)?a.scadenze:[];ADV.produzione=Array.isArray(a.produzione)?a.produzione:[];ADV.rimanenze=Array.isArray(a.rimanenze)?a.rimanenze:[]}}catch(x){}}
+function saveADV(){persist('pa_adv',ADV)}
+function giorniAllaScadenza(data){return Math.round((new Date(data+'T12:00:00')-new Date(oggi()+'T12:00:00'))/86400000)}
+function nomeTipoScadenza(tipo){return {pagamento:'Pagamento',incasso:'Incasso',altro:'Altro'}[tipo]||'Altro'}
+function statoScadenza(x){const g=giorniAllaScadenza(x.data);return g<0?`Scaduta da ${-g} ${g===-1?'giorno':'giorni'}`:g===0?'Scade oggi':g===1?'Scade domani':`Tra ${g} giorni`}
+function aggiornaAvvisoScadenze(){
+ const box=$('#deadline-alert'),aperte=(ADV.scadenze||[]).filter(x=>!x.completata),vicine=aperte.filter(x=>{const g=giorniAllaScadenza(x.data);return g>=0&&g<=7}),scadute=aperte.filter(x=>giorniAllaScadenza(x.data)<0);
+ if(S.scadDismissed||S.tab==='scadenzario'||!vicine.length&&!scadute.length){box.style.display='none';box.innerHTML='';return}
+ const prime=[...scadute,...vicine].sort((a,b)=>a.data.localeCompare(b.data)).slice(0,4);
+ box.style.display='block';box.innerHTML=`<strong>Scadenzario: ${vicine.length} ${vicine.length===1?'scadenza':'scadenze'} nei prossimi 7 giorni${scadute.length?` · ${scadute.length} ${scadute.length===1?'scaduta':'scadute'}`:''}</strong><ul>${prime.map(x=>`<li>${fd(x.data)} · ${esc(x.titolo)} (${statoScadenza(x).toLowerCase()})</li>`).join('')}</ul>${vicine.length+scadute.length>4?'<p class="note">Apri lo Scadenzario per vedere tutte le scadenze.</p>':''}<button class="btn s" type="button" id="scadOpen">Apri Scadenzario</button><button class="x" type="button" id="scadDismiss" aria-label="Nascondi l’avviso per questa sessione">Nascondi</button>`;
+ $('#scadOpen').onclick=()=>{S.tab='scadenzario';S.scadEdit=null;draw();window.scrollTo(0,0)};
+ $('#scadDismiss').onclick=()=>{S.scadDismissed=true;aggiornaAvvisoScadenze()};
+}
+function scadenzario(){
+ const elenco=ADV.scadenze||[],ed=elenco.find(x=>x.id===S.scadEdit),aperte=elenco.filter(x=>!x.completata).sort((a,b)=>a.data.localeCompare(b.data)||a.id-b.id),completate=elenco.filter(x=>x.completata).sort((a,b)=>b.data.localeCompare(a.data)||b.id-a.id);
+ const riga=x=>`<div class="row" style="padding:12px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap"><div class="nm"><strong>${esc(x.titolo)}</strong><small>${fd(x.data)} · ${nomeTipoScadenza(x.tipo)}${x.importo!==null&&x.importo!==undefined?' · '+eur(x.importo)+' €':''}${x.completata?' · Completata':' · '+statoScadenza(x)}</small>${x.nota?`<small>${esc(x.nota)}</small>`:''}</div><button class="x" type="button" style="color:var(--sea)" data-scadtoggle="${x.id}">${x.completata?'Riapri':'Completa'}</button><button class="x" type="button" style="color:var(--sea)" data-scadedit="${x.id}">Modifica</button><button class="x" type="button" data-scaddel="${x.id}">Elimina</button></div>`;
+ return `<h2>Scadenzario</h2><p class="note">Registra pagamenti, incassi e altri termini. È un promemoria: segnare una scadenza come completata non registra automaticamente un’entrata o un’uscita nei Conti.</p><form id="fscad"><h3 style="margin:0 0 8px;font-size:16px">${ed?'Modifica scadenza':'Nuova scadenza'}</h3><label>Descrizione<input name="titolo" value="${esc(ed?.titolo||'')}" placeholder="Es. Pagamento contributi INPS" required></label><div class="g2"><label>Tipo<select name="tipo"><option value="pagamento" ${(ed?.tipo||'altro')==='pagamento'?'selected':''}>Pagamento</option><option value="incasso" ${ed?.tipo==='incasso'?'selected':''}>Incasso</option><option value="altro" ${(ed?.tipo||'altro')==='altro'?'selected':''}>Altro termine</option></select></label><label>Data<input name="data" type="date" value="${ed?.data||oggi()}" required></label></div><label>Importo previsto (€), facoltativo<input name="importo" type="number" min="0" step="0.01" inputmode="decimal" value="${ed?.importo??''}"></label><label>Nota (facoltativa)<input name="nota" value="${esc(ed?.nota||'')}"></label><button class="btn" type="submit">${ed?'Salva modifiche':'Aggiungi scadenza'}</button>${ed?'<button class="btn s" type="button" id="scadCancel">Annulla modifica</button>':''}<p class="note" id="scadMsg"></p></form><h3>Da fare (${aperte.length})</h3>${aperte.length?aperte.map(riga).join(''):'<p class="empty">Nessuna scadenza aperta.</p>'}<details class="lk"><summary>Completate (${completate.length})</summary>${completate.length?completate.map(riga).join(''):'<p class="empty">Nessuna scadenza completata.</p>'}</details>`;
+}
+function bindScadenzario(){
+ const f=$('#fscad');f.onsubmit=e=>{e.preventDefault();const d=new FormData(f),titolo=String(d.get('titolo')||'').trim(),tipo=String(d.get('tipo')||'altro'),data=String(d.get('data')||''),raw=String(d.get('importo')||'').trim(),importo=raw===''?null:Number(raw),nota=String(d.get('nota')||'').trim();if(!titolo||!['pagamento','incasso','altro'].includes(tipo)||!/^\d{4}-\d{2}-\d{2}$/.test(data)||Number.isNaN(Date.parse(data))||importo!==null&&(!Number.isFinite(importo)||importo<0)){$('#scadMsg').textContent='Controlla descrizione, data e importo.';return}
+  const old=ADV.scadenze.find(x=>x.id===S.scadEdit),record={id:old?.id??Date.now(),titolo,tipo,data,importo,nota,completata:old?.completata||false};if(old)Object.assign(old,record);else ADV.scadenze.push(record);saveADV();S.scadEdit=null;S.scadDismissed=false;draw()};
+ $('#scadCancel')?.addEventListener('click',()=>{S.scadEdit=null;draw()});
+ document.querySelectorAll('[data-scadedit]').forEach(b=>b.onclick=()=>{S.scadEdit=Number(b.dataset.scadedit);draw();window.scrollTo(0,0)});
+ document.querySelectorAll('[data-scadtoggle]').forEach(b=>b.onclick=()=>{const x=ADV.scadenze.find(y=>y.id===Number(b.dataset.scadtoggle));if(!x)return;x.completata=!x.completata;S.scadDismissed=false;saveADV();draw()});
+ document.querySelectorAll('[data-scaddel]').forEach(b=>b.onclick=()=>conf(b,()=>{ADV.scadenze=ADV.scadenze.filter(x=>x.id!==Number(b.dataset.scaddel));if(S.scadEdit===Number(b.dataset.scaddel))S.scadEdit=null;saveADV();draw()}));
+}
+function scollegaVenditeLotti(){
+ let contiModificati=false,magazzinoModificato=false;
+ for(const c of S.c){if(c.saleid!==undefined){const v=ADV.vendite.find(x=>x.id===c.saleid),automatico=v?`${v.lotto?'Lotto '+v.lotto:'Senza lotto'}${v.cliente?' · '+v.cliente:''}`:'';if(automatico&&c.desc===automatico)c.desc='';delete c.saleid;contiModificati=true}}
+ for(const v of ADV.vendite)if(v.cid!==undefined){delete v.cid;magazzinoModificato=true}
+ if(contiModificati)save();if(magazzinoModificato)saveADV();
+}
+function resa(){
+ return `<h2>Resa del latte</h2><div class="card"><p class="note">Confronta la resa fisica ed economica di diverse lavorazioni. La scheda legge i prezzi di vendita in €/kg da Prezzi → Formaggi; non salva i valori e non modifica Conti, prezzi o rimanenze.</p>
+ <div class="g2"><label>Tipo di latte<select id="rtipo"><option value="">Seleziona il latte</option><option>Ovino</option><option>Caprino</option><option>Bovino</option><option>Bufalino</option><option>Misto</option></select></label><label>Prodotto finale<select id="rprodotto"><option value="">Seleziona il prodotto</option>${CATS.formaggi.voci.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('')}<option value="__altro">Altro prodotto…</option></select></label></div>
+ <label id="raltrobox" style="display:none">Nome del prodotto<input id="raltro" placeholder="Scrivi il prodotto finale"></label>
+ <div class="g2"><label>Latte lavorato (litri)<input id="rlitri" type="number" min="0.01" step="any" inputmode="decimal"></label><label>Prodotto ottenuto (kg)<input id="rkg" type="number" min="0.01" step="any" inputmode="decimal"></label></div>
+ <label>Prezzo di vendita utilizzato (€/kg)<input id="rprezzo" type="number" min="0.01" step="any" inputmode="decimal" placeholder="Seleziona un prodotto o inserisci un prezzo"></label><p class="note" id="rprezzoinfo">Seleziona un prodotto per leggere il prezzo dal listino.</p>
+ <div class="g2"><div>Resa del latte<div class="res" id="rres">—</div><small class="note">kg di prodotto ogni 100 litri</small></div><div>Ricavo totale presunto<div class="res" id="rricavo">—</div><small class="note">kg ottenuti × prezzo presunto</small></div></div>
+ <div class="g2"><div>Ricavo per litro di latte<div class="res" id="rperlitro">—</div></div><div>Ricavo ogni 100 litri<div class="res" id="rper100">—</div></div></div>
+ <p class="note" id="rresnote" role="status">Scegli latte e prodotto, poi inserisci litri e kg.</p><p class="note">Il ricavo è lordo: non sottrae il costo del latte, della lavorazione o della vendita. Nel confronto il ricavo ogni 100 litri permette di valutare lavorazioni con quantità di latte diverse.</p>
+ <button class="btn s" id="radd" type="button" disabled>Aggiungi al confronto</button><p class="note">Ripeti il calcolo per ogni tipo di latte o prodotto che vuoi confrontare. Gli scenari restano visibili solo finché tieni aperta questa scheda.</p><div id="rconfronto"></div></div>`;
+}
+function bindResa(){
+ const tipo=$('#rtipo'),prodotto=$('#rprodotto'),altro=$('#raltro'),altroBox=$('#raltrobox'),litri=$('#rlitri'),kg=$('#rkg'),prezzo=$('#rprezzo'),prezzoInfo=$('#rprezzoinfo'),note=$('#rresnote'),add=$('#radd'),confronto=$('#rconfronto');
+ const righe=[];
+ const nomeProdotto=()=>prodotto.value==='__altro'?altro.value.trim():prodotto.value;
+ const dati=()=>{const l=Number(litri.value),k=Number(kg.value),p=Number(prezzo.value);return {latte:tipo.value,prodotto:nomeProdotto(),litri:l,kg:k,prezzo:p,completi:!!tipo.value&&!!nomeProdotto()&&Number.isFinite(l)&&l>0&&Number.isFinite(k)&&k>0,conPrezzo:prezzo.value!==''&&Number.isFinite(p)&&p>0}};
+ const renderConfronto=()=>{const ordinate=righe.map((r,i)=>({...r,i,ricavo:r.kg*r.prezzo,per100:r.kg*r.prezzo/r.litri*100})).sort((a,b)=>b.per100-a.per100||b.ricavo-a.ricavo);confronto.innerHTML=ordinate.length?`<h3>Confronto delle lavorazioni</h3><p class="note"><strong>Ricavo lordo più alto ogni 100 litri:</strong> ${esc(ordinate[0].prodotto)} da latte ${esc(ordinate[0].latte)} (${eur(ordinate[0].per100)} €). Il ricavo totale dipende anche dai litri inseriti.</p><div class="compare-wrap"><table class="compare"><thead><tr><th>Pos.</th><th>Latte / prodotto</th><th>Prezzo €/kg</th><th>Resa kg/100 l</th><th>Ricavo €/100 l</th><th>Ricavo totale</th><th></th></tr></thead><tbody>${ordinate.map((r,pos)=>`<tr><td>${pos+1}</td><td style="text-align:left">${esc(r.latte)} / ${esc(r.prodotto)}</td><td>${eur(r.prezzo)}</td><td>${eur(r.kg/r.litri*100)}</td><td>${eur(r.per100)} €</td><td>${eur(r.ricavo)} €</td><td><button class="x" type="button" data-resa-del="${r.i}" aria-label="Rimuovi ${esc(r.prodotto)} dal confronto">Rimuovi</button></td></tr>`).join('')}</tbody></table></div><button class="btn s" id="rsvuota" type="button">Svuota confronto</button>`:''};
+ const update=()=>{altroBox.style.display=prodotto.value==='__altro'?'block':'none';const d=dati(),listino=prodotto.value&&prodotto.value!=='__altro'?ultimoFormaggioKg(prodotto.value):null;prezzoInfo.textContent=!d.prodotto?'Seleziona un prodotto per leggere il prezzo dal listino.':listino?`Listino Formaggi: ${eur(listino.prezzo)} €/kg del ${fd(listino.data)}. Puoi modificare il prezzo per questa simulazione.`:'Nessun prezzo in €/kg nel listino per questo prodotto: inserisci un prezzo presunto.';$('#rres').textContent=d.completi?eur(d.kg/d.litri*100):'—';$('#rricavo').textContent=d.completi&&d.conPrezzo?`${eur(d.kg*d.prezzo)} €`:'—';$('#rperlitro').textContent=d.completi&&d.conPrezzo?`${eur(d.kg*d.prezzo/d.litri)} €/l`:'—';$('#rper100').textContent=d.completi&&d.conPrezzo?`${eur(d.kg*d.prezzo/d.litri*100)} €`:'—';note.textContent=!d.completi?'Scegli latte e prodotto, poi inserisci litri e kg maggiori di zero.':!d.conPrezzo?'Inserisci un prezzo per vedere il ricavo economico.':`${d.latte} → ${d.prodotto}: ${eur(d.litri)} l di latte, ${eur(d.kg)} kg di prodotto.`;add.disabled=!(d.completi&&d.conPrezzo)};
+ const caricaPrezzo=()=>{const l=prodotto.value!=='__altro'?ultimoFormaggioKg(prodotto.value):null;prezzo.value=l&&l.prezzo>0?l.prezzo:'';update()};
+ [tipo,altro,litri,kg,prezzo].forEach(el=>{el.oninput=update;el.onchange=update});prodotto.onchange=caricaPrezzo;
+ add.onclick=()=>{const d=dati();if(!d.completi||!d.conPrezzo)return;righe.push(d);renderConfronto()};
+ confronto.onclick=e=>{const b=e.target.closest('[data-resa-del]');if(b){righe.splice(Number(b.dataset.resaDel),1);renderConfronto()}else if(e.target.closest('#rsvuota')){righe.length=0;renderConfronto()}};
+ update();
+}
+const MODU={vivo:'€/kg vivo',macellato:'€/kg macellato',capo:'€/capo'};
+function capi(){
+ const C=ADV.capi=ADV.capi||[],ed=S.capEd?C.find(x=>x.id===S.capEd):null,y=oggi().slice(0,4);
+ const f=ed||{data:oggi(),voce:CATS.animali.voci[0],n:'',mod:'vivo',peso:'',prezzo:'',cliente:'',cid:1,pid:1};
+ const ya=C.filter(x=>x.data.slice(0,4)===y),per={};
+ ya.forEach(x=>{const p=per[x.voce]||(per[x.voce]={n:0,t:0});p.n+=x.n;p.t+=x.totale});
+ const voci=[...new Set([f.voce,...CATS.animali.voci])];
+ const righe=[...C].sort((a,b)=>b.data.localeCompare(a.data)||b.id-a.id).slice(0,50);
+ return `<h2>Vendita capi</h2><div class="card">Venduti nel ${y}<div class="res">${ya.reduce((s,x)=>s+x.n,0)} capi · ${eur(ya.reduce((s,x)=>s+x.totale,0))} €</div>${Object.entries(per).map(([v,p])=>`<div class="note">${esc(v)}: ${p.n} capi · ${eur(p.t)} €</div>`).join('')}</div>
+ <form id="cpf"><h2 style="margin-top:0">${ed?'Modifica vendita':'Nuova vendita'}</h2>
+ <div class="g2"><label>Data<input name="data" type="date" value="${f.data}" required></label><label>Numero di capi<input name="n" type="number" min="1" step="1" inputmode="numeric" value="${f.n}" required></label></div>
+ <label>Categoria<select name="voce">${voci.map(v=>`<option ${v===f.voce?'selected':''}>${esc(v)}</option>`).join('')}</select></label>
+ <label>Come lo vendi?<select name="mod"><option value="vivo" ${f.mod==='vivo'?'selected':''}>A peso vivo (€/kg)</option><option value="macellato" ${f.mod==='macellato'?'selected':''}>A peso macellato (€/kg)</option><option value="capo" ${f.mod==='capo'?'selected':''}>A capo (€/capo)</option></select></label>
+ <div class="g2"><label id="lpeso">Peso totale dei capi (kg)<input name="peso" type="number" min="0.01" step="any" inputmode="decimal" value="${f.peso||''}"></label><label><span id="tprezzo">Prezzo (€/kg)</span><input name="prezzo" type="number" min="0" step="any" inputmode="decimal" value="${f.prezzo}" required></label></div>
+ <label>Acquirente (facoltativo)<input name="cliente" value="${esc(f.cliente||'')}"></label>
+ <label><input name="ccont" type="checkbox" style="width:auto" ${f.cid?'checked':''}> Registra l’entrata nei Conti</label>
+ <label><input name="cprez" type="checkbox" style="width:auto" ${f.pid?'checked':''}> Aggiorna lo storico dei prezzi</label>
+ <div class="res" id="ctot">—</div><div class="note" id="cnote"></div>
+ <button class="btn">Salva vendita</button>${ed?'<button class="btn s" type="button" id="cx">Annulla</button>':''}</form>
+ <h2>Vendite registrate</h2>${righe.length?righe.map(x=>`<div class="row" style="padding:10px 14px">${fd(x.data)} · ${esc(x.voce)} · <strong>${x.n} capi</strong><div class="note">${x.mod==='capo'?`${eur(x.prezzo)} €/capo`:`${eur(x.peso)} kg × ${eur(x.prezzo)} ${MODU[x.mod]}`} = <strong>${eur(x.totale)} €</strong>${x.cliente?' · '+esc(x.cliente):''}</div><button class="x" style="color:var(--sea)" type="button" data-capm="${x.id}">Modifica</button><button class="x" type="button" data-capd="${x.id}">Elimina</button></div>`).join(''):'<p class="empty">Nessuna vendita registrata.</p>'}`;
+}
+function bindCapi(){
+ const f=$('#cpf'),el=n=>f.elements[n];
+ const sync=()=>{const capo=el('mod').value==='capo';
+  $('#lpeso').style.display=capo?'none':'block';$('#tprezzo').textContent=capo?'Prezzo per capo (€)':'Prezzo (€/kg)';
+  const n=Number(el('n').value),p=Number(el('prezzo').value),kg=Number(el('peso').value),t=capo?n*p:kg*p;
+  if(t>0&&n>0){$('#ctot').textContent=`${eur(t)} €`;$('#cnote').textContent=capo?`${eur(t/n)} € a capo`:`${eur(t/n)} € a capo · ${eur(kg/n)} kg a capo`}
+  else{$('#ctot').textContent='—';$('#cnote').textContent=capo?'Inserisci numero di capi e prezzo a capo.':'Inserisci numero di capi, peso totale e prezzo al kg.'}};
+ f.oninput=sync;f.onchange=sync;sync();
+ const x=$('#cx');if(x)x.onclick=()=>{S.capEd=null;draw()};
+ f.onsubmit=e=>{e.preventDefault();
+  const n=Number(el('n').value),p=Number(el('prezzo').value),mod=el('mod').value,capo=mod==='capo',kg=capo?0:Number(el('peso').value);
+  if(!(n>=1)||!(p>=0)||(!capo&&!(kg>0))||!el('data').value){$('#cnote').textContent='Controlla i valori inseriti.';return}
+  const old=S.capEd?ADV.capi.find(z=>z.id===S.capEd):null,s=old||{id:Date.now()},tot=capo?n*p:kg*p;
+  Object.assign(s,{data:el('data').value,voce:el('voce').value,n,mod,peso:kg,prezzo:p,totale:tot,cliente:el('cliente').value.trim()});
+  const desc=`${n} ${s.voce}${s.cliente?' · '+s.cliente:''}`;
+  if(el('ccont').checked){let r=S.c.find(z=>z.id===s.cid);if(!r){r={id:Date.now()+1,tipo:'e',cat:'Vendita animali'};S.c.push(r);s.cid=r.id}Object.assign(r,{importo:tot,data:s.data,desc,art:s.voce,pu:p,um:MODU[mod],qta:capo?n:kg,capid:s.id})}
+  else if(s.cid){S.c=S.c.filter(z=>z.id!==s.cid);delete s.cid}
+  if(el('cprez').checked){let r=S.e.find(z=>z.id===s.pid);if(!r){r={id:Date.now()+2,cat:'animali'};S.e.push(r);s.pid=r.id}Object.assign(r,{voce:s.voce,prezzo:p,unita:MODU[mod],data:s.data,nota:s.cliente})}
+  else if(s.pid){rimuoviPrezzoCollegato(s.pid,s.cid,[s.id]);delete s.pid}
+  if(s.cid){const r=S.c.find(z=>z.id===s.cid);if(r){if(s.pid)r.pid=s.pid;else delete r.pid}}
+  if(!old)ADV.capi.push(s);
+  S.capEd=null;saveADV();save();draw()};
+ document.querySelectorAll('[data-capm]').forEach(b=>b.onclick=()=>{S.capEd=+b.dataset.capm;draw();window.scrollTo(0,0)});
+ document.querySelectorAll('[data-capd]').forEach(b=>b.onclick=()=>{const s=ADV.capi.find(z=>z.id===+b.dataset.capd);if(!s)return;const prezzo=prezzoCollegatoSoloQui(s.pid,s.cid,[s.id]);
+  conf(b,()=>{S.c=S.c.filter(z=>z.id!==s.cid);rimuoviPrezzoCollegato(s.pid,s.cid,[s.id]);ADV.capi=ADV.capi.filter(z=>z!==s);saveADV();save();draw()},prezzo?'Conferma: vendita + prezzo':undefined)});
+}
+function draw(){
+ tabs();
+ aggiornaAvvisoScadenze();
+ const m=$('#main');
+ $('#fab').style.display=CATS[S.tab]&&!S.open?'block':'none';
+ if(S.open){m.innerHTML=form();bindForm();return}
+ if(CATS[S.tab]){m.innerHTML=lista(S.tab);bindV(S.tab)}
+ else if(S.tab==='conti'){m.innerHTML=conti();bindConti()}
+ else if(S.tab==='prev'){m.innerHTML=prev();bindPrev()}
+
+ else if(S.tab==='capi'){m.innerHTML=capi();bindCapi()}
+ else if(S.tab==='resa'){m.innerHTML=resa();bindResa()}
+ else if(S.tab==='scadenzario'){m.innerHTML=scadenzario();bindScadenzario()}
+
+ else if(S.tab==='agevolazioni'){m.innerHTML=agevolazioni()}
+ else{m.innerHTML=dati();let previewText='';$('#dwn').onclick=()=>{const blob=new Blob([$('#bk').value],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`prezzi-stalla-backup-${oggi()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);persist('pa_last_backup',oggi());$('#lastBackup').textContent=fd(oggi());$('#rm').textContent='Copia scaricata: conservala in un luogo sicuro.'};$('#cpbk').onclick=async()=>{try{await navigator.clipboard.writeText($('#bk').value);$('#rm').textContent='Copia copiata negli appunti.'}catch(x){$('#rawBackup').open=true;$('#bk').select();$('#rm').textContent='Seleziona e copia il testo qui sopra.'}};
+ $('#im').oninput=()=>{previewText='';$('#ri').disabled=true;$('#previewResult').textContent=''};
+ $('#previewBackup').onclick=()=>{try{const testo=$('#im').value.trim(),a=JSON.parse(testo);$('#previewResult').innerHTML=anteprimaBackup(a);previewText=testo;$('#ri').disabled=false}catch(x){previewText='';$('#ri').disabled=true;$('#previewResult').textContent='Impossibile leggere la copia. Controlla che il testo JSON sia completo.'}};
+ $('#backupFile').onchange=async()=>{const file=$('#backupFile').files?.[0];if(!file)return;try{$('#im').value=await file.text();$('#im').dispatchEvent(new Event('input'));$('#previewBackup').click()}catch(x){$('#previewResult').textContent='Impossibile leggere il file selezionato.'}};
+ $('#ri').onclick=async()=>{if(!previewText||previewText!==$('#im').value.trim()){$('#previewResult').textContent='Mostra di nuovo l’anteprima prima di ripristinare.';$('#ri').disabled=true;return}let applicata=false;try{
+ const a=JSON.parse($('#im').value);
+ const nomi=v=>Array.isArray(v)&&v.every(x=>typeof x==='string'&&x.trim().length>0);
+ const validoPrezzi=v=>Array.isArray(v)&&v.every(x=>x&&Number.isSafeInteger(x.id)&&['animali','formaggi','mangimi'].includes(x.cat)&&typeof x.voce==='string'&&x.voce.trim()&&Number.isFinite(x.prezzo)&&x.prezzo>=0&&typeof x.unita==='string'&&x.unita.trim()&&dataValida(x.data));
+ const validoConti=v=>Array.isArray(v)&&v.every(x=>x&&Number.isSafeInteger(x.id)&&['e','u'].includes(x.tipo)&&typeof x.cat==='string'&&x.cat.trim()&&Number.isFinite(x.importo)&&x.importo>=0&&dataValida(x.data)&&['stipendio','contributiInps','altriOneri'].every(k=>x[k]===undefined||Number.isFinite(x[k])&&x[k]>=0)&&(x.stipendio===undefined||x.stipendio>0&&Math.abs(x.importo-Math.round((x.stipendio+(x.contributiInps||0)+(x.altriOneri||0))*100)/100)<0.01));
+ const validoV=v=>v&&Object.keys(CATS).every(k=>nomi(v[k]));
+ const validoK=k=>k&&nomi(k.entrate)&&nomi(k.uscite)&&k.map&&typeof k.map==='object'&&!Array.isArray(k.map)&&Object.entries(k.map).every(([a,b])=>typeof a==='string'&&Object.hasOwn(CATS,b));
+ const validoP=p=>p&&(p.az===undefined||typeof p.az==='string')&&['cli','tel','iva','val','nota'].every(k=>typeof p[k]==='string')&&Array.isArray(p.righe)&&p.righe.every(r=>r&&['d','q','u','p'].every(k=>typeof r[k]==='string'));
+ const validoProduzione=a=>!a.produzione||Array.isArray(a.produzione)&&a.produzione.every(x=>x&&Number.isSafeInteger(x.id)&&dataValida(x.data)&&typeof x.prodotto==='string'&&x.prodotto.trim()&&(x.litri===null||x.litri===undefined||Number.isFinite(x.litri)&&x.litri>0)&&Number.isFinite(x.kg)&&x.kg>0);
+ const validoRimanenze=a=>!a.rimanenze||Array.isArray(a.rimanenze)&&a.rimanenze.every(x=>x&&Number.isSafeInteger(x.id)&&Number.isSafeInteger(x.anno)&&x.anno>=2000&&x.anno<=2100&&typeof x.prodotto==='string'&&x.prodotto.trim()&&(x.iniziale===null||Number.isFinite(x.iniziale)&&x.iniziale>=0)&&Number.isFinite(x.finale)&&x.finale>=0&&['altreUscite','acquisti'].every(k=>x[k]===undefined||Number.isFinite(x[k])&&x[k]>=0))&&new Set(a.rimanenze.map(x=>`${x.anno}|${chiaveProdotto(x.prodotto)}`)).size===a.rimanenze.length;
+ const validoScadenze=a=>!a.scadenze||Array.isArray(a.scadenze)&&a.scadenze.every(x=>x&&(x.tipo===undefined||['pagamento','incasso','altro'].includes(x.tipo))&&(x.importo===undefined||x.importo===null||Number.isFinite(x.importo)&&x.importo>=0)&&(x.completata===undefined||typeof x.completata==='boolean'));
+ const validoA=a=>a&&Array.isArray(a.latte)&&Array.isArray(a.lotti)&&Array.isArray(a.vendite)&&a.latte.every(x=>Number.isSafeInteger(x.id)&&dataValida(x.data)&&Number.isFinite(x.litri)&&x.litri>0&&typeof x.specie==='string')&&a.lotti.every(x=>Number.isSafeInteger(x.id)&&dataValida(x.data)&&typeof x.prodotto==='string'&&Number.isFinite(x.litri)&&x.litri>0&&Number.isFinite(x.kg)&&x.kg>0&&Number.isFinite(x.costoLatte)&&x.costoLatte>=0&&Number.isFinite(x.altriCosti)&&x.altriCosti>=0&&['costoMangimi','costoEnergia','costoLavoro','costoConfezione'].every(k=>x[k]===undefined||Number.isFinite(x[k])&&x[k]>=0))&&a.vendite.every(x=>Number.isSafeInteger(x.id)&&(Number.isSafeInteger(x.lotto)||x.lotto===null&&typeof x.prodotto==='string'&&x.prodotto.trim())&&dataValida(x.data)&&Number.isFinite(x.kg)&&x.kg>0&&Number.isFinite(x.prezzo)&&x.prezzo>=0)&&a.vendite.every(x=>x.lotto===null||a.lotti.some(l=>l.id===x.lotto))&&a.lotti.every(l=>a.vendite.filter(v=>v.lotto===l.id).reduce((s,v)=>s+v.kg,0)<=l.kg+1e-8)&&(!a.capi||(Array.isArray(a.capi)&&a.capi.every(x=>Number.isSafeInteger(x.id)&&dataValida(x.data)&&typeof x.voce==='string'&&Number.isFinite(x.n)&&x.n>=1&&['vivo','macellato','capo'].includes(x.mod)&&Number.isFinite(x.prezzo)&&x.prezzo>=0&&Number.isFinite(x.totale)&&x.totale>=0)))&&(!a.scadenze||(Array.isArray(a.scadenze)&&a.scadenze.every(x=>Number.isSafeInteger(x.id)&&dataValida(x.data)&&typeof x.titolo==='string'&&x.titolo.trim()&&typeof x.nota==='string')));
+ if(Array.isArray(a)){if(!validoPrezzi(a))throw 0;S.e=a}
+ else if(a&&validoPrezzi(a.e)&&validoConti(a.c)&&(!a.v||validoV(a.v))&&(!a.k||validoK(a.k))&&(!a.p||validoP(a.p))&&(!a.a||validoA(a.a)&&validoProduzione(a.a)&&validoRimanenze(a.a)&&validoScadenze(a.a))){S.e=a.e;S.c=a.c;if(a.v)setV(a.v);if(a.k)setK(a.k);if(a.p){P=a.p;saveP()}if(a.a){ADV=a.a;ADV.capi=Array.isArray(ADV.capi)?ADV.capi:[];ADV.scadenze=Array.isArray(ADV.scadenze)?ADV.scadenze:[];ADV.produzione=Array.isArray(ADV.produzione)?ADV.produzione:[];ADV.rimanenze=Array.isArray(ADV.rimanenze)?ADV.rimanenze:[];saveADV()}S.scadDismissed=false}
+ else throw 0;
+ applicata=true;scollegaVenditeLotti();save();if(archiveWorker&&!(await archiveWorker)||archiveFailed)throw Error('Salvataggio non riuscito');draw();const msg=$('#rm');if(msg)msg.textContent='Dati ripristinati e salvati in IndexedDB.'
+ }catch(x){$('#previewResult').textContent=applicata?'I dati sono visibili ma il salvataggio non è riuscito. Scarica subito una copia JSON prima di chiudere la pagina.':'Copia non valida o incompleta: nessun dato è stato modificato.'}}
+ }
+}
+$('#main').addEventListener('click',e=>{const q=e.target.closest('[data-delc]');
+ const linked=e.target.closest('[data-open-cap]');if(linked){S.capEd=Number(linked.dataset.openCap);S.tab='capi';draw();window.scrollTo(0,0);return}
+ if(q){const id=Number(q.dataset.delc),conto=S.c.find(x=>x.id===id),capi=ADV.capi.filter(x=>x.cid===id),capiIds=capi.map(x=>x.id),prezzi=[...new Set([conto?.pid,...capi.map(x=>x.pid)])].filter(pid=>prezzoCollegatoSoloQui(pid,id,capiIds));
+  conf(q,()=>{S.e=S.e.filter(x=>!prezzi.includes(x.id));ADV.capi=ADV.capi.filter(x=>x.cid!==id);S.c=S.c.filter(x=>x.id!==id);saveADV();save();draw()},prezzi.length?`Conferma: riga + ${prezzi.length===1?'prezzo':'prezzi'}`:undefined);return}
+ const b=e.target.closest('[data-del]');
+ if(b)conf(b,()=>{S.od=b.dataset.k||null;S.e=S.e.filter(x=>x.id!==+b.dataset.del);save();draw()})});
+$('#fab').onclick=()=>{S.open=true;draw();window.scrollTo(0,0)};
+document.addEventListener('click',e=>{if(!e.target.closest('.menu-wrap'))document.querySelectorAll('.menu-group[open]').forEach(d=>d.open=false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.menu-group[open]').forEach(d=>{d.open=false;d.querySelector('summary')?.focus()})});
+window.addEventListener('beforeunload',e=>{if(archiveWorker&&archiveCommitted<archiveGeneration){e.preventDefault();e.returnValue=''}});
+async function avviaArchivio(){
+ let migrazione=false;
+ try{archiveDb=await openArchive();const salvato=await readArchive();if(salvato?.values&&typeof salvato.values==='object'&&!Array.isArray(salvato.values)){archiveCache=salvato.values;archiveRevision=Number.isSafeInteger(salvato.revision)?salvato.revision:0}else{archiveCache=legacyArchive();migrazione=Object.keys(archiveCache).length>0}}
+ catch(x){if(archiveDb)archiveDb.close();archiveDb=null;archiveCache=legacyArchive();storageError()}
+ load();loadV();loadCC();loadP();loadADV();scollegaVenditeLotti();archiveLoading=false;
+ if(archiveDb&&(migrazione||archiveChangedDuringLoad)){queueArchiveSave();const ok=archiveWorker?await archiveWorker:false;if(ok&&migrazione)storageStatus('Dati precedenti importati in IndexedDB')}
+ else if(archiveDb)storageStatus('Archivio IndexedDB pronto');
+ draw();
+}
+$('#app-version').textContent=APP_VERSION;
+$('#main').innerHTML='<p class="note">Apertura dell’archivio…</p>';
+avviaArchivio();
+function aggiornaConnessione(){$('#offline-status').style.display=navigator.onLine?'none':'block'}
+window.addEventListener('online',aggiornaConnessione);window.addEventListener('offline',aggiornaConnessione);aggiornaConnessione();
+let installazionePendente=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installazionePendente=e;$('#install-app').hidden=false});
+$('#install-app').onclick=async()=>{if(!installazionePendente)return;const richiesta=installazionePendente;installazionePendente=null;$('#install-app').hidden=true;await richiesta.prompt()};
+window.addEventListener('appinstalled',()=>{$('#install-app').hidden=true;installazionePendente=null});
+if('serviceWorker' in navigator&&(location.protocol==='https:'||['localhost','127.0.0.1'].includes(location.hostname))){
+ let aggiornamentoRichiesto=false;
+ navigator.serviceWorker.addEventListener('controllerchange',()=>{if(aggiornamentoRichiesto)location.reload()});
+ window.addEventListener('load',async()=>{try{const registrazione=await navigator.serviceWorker.register('./sw.js',{scope:'./'});
+  const mostraAggiornamento=()=>{if(registrazione.waiting&&navigator.serviceWorker.controller)$('#pwa-update').hidden=false};
+  mostraAggiornamento();registrazione.addEventListener('updatefound',()=>{const worker=registrazione.installing;if(worker)worker.addEventListener('statechange',()=>{if(worker.state==='installed')mostraAggiornamento()})});
+  $('#apply-update').onclick=async()=>{if(archiveWorker&&!(await archiveWorker)||archiveFailed)return;const worker=registrazione.waiting;if(!worker)return;aggiornamentoRichiesto=true;worker.postMessage({type:'SKIP_WAITING'})};
+ }catch(x){console.warn('Modalità offline non disponibile:',x)}})
+}
+</script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" aria-label="Stalla e caseificio">
+  <rect width="512" height="512" fill="#566B2A"/>
+  <path d="M199 122h107v44H199z" fill="#F8F6E9"/>
+  <path d="M202 165h101v34c29 18 47 48 47 83v96c0 23-19 42-42 42H197c-23 0-42-19-42-42v-96c0-35 18-65 47-83z" fill="#F8F6E9"/>
+  <path d="M170 292c40 21 83 21 129 0 16-7 31-12 47-13v91c0 19-15 34-34 34H193c-19 0-34-15-34-34v-83c4 2 7 3 11 5z" fill="#D9E4C8"/>
+  <path d="M174 290c40 21 81 20 127-1 16-7 30-11 43-12" fill="none" stroke="#566B2A" stroke-width="11" stroke-linecap="round"/>
+  <path d="M270 365l119-59v91H270z" fill="#E7B85A" stroke="#F8F6E9" stroke-width="12" stroke-linejoin="round"/>
+  <circle cx="344" cy="354" r="13" fill="#B77D30"/>
+  <circle cx="376" cy="381" r="7" fill="#B77D30"/>
+  <circle cx="299" cy="382" r="8" fill="#B77D30"/>
+</svg>
